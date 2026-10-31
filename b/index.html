@@ -20,11 +20,13 @@
   --shadow:0 1px 2px rgba(18,19,20,.04),0 16px 40px -18px rgba(64,36,209,.22);
   --r:24px;
   --font:'Vazirmatn',system-ui,Tahoma,sans-serif;
+  --u:var(--lime); --b3:var(--violet-150); --l-bg:#F2FFD6; --how:var(--violet); --blob:.55;
 }
 [data-theme="dark"]{
   --bg:#121314; --surface:#1A1B1E; --surface-2:#1F1A33; --text:#F8F8F8; --text-2:#C9C9CF; --muted:#8E8E96; --border:#2A2B30;
   --primary:var(--violet-300); --on-primary:#121314;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 20px 50px -20px rgba(64,36,209,.5);
+  --u:rgba(182,162,255,.4); --b3:#2A2450; --l-bg:rgba(216,255,128,.07); --how:#241C5C; --blob:.22;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -290,10 +292,127 @@ footer{padding:60px 0 34px}
 .sheet.open{opacity:1;pointer-events:auto;transform:none}
 .sheet a:not(.btn){font-size:26px;font-weight:900;padding:12px 0;border-bottom:1px solid var(--border)}
 
+
+/* ===== v2: color + motion layer ===== */
+.progress{position:fixed;top:0;left:0;right:0;height:4px;z-index:70;background:linear-gradient(270deg,var(--violet),var(--violet-300),var(--lime));transform-origin:100% 50%;transform:scaleX(var(--p,0));pointer-events:none}
+.hero{position:relative;isolation:isolate}
+.blobs{position:absolute;inset:-120px 0 0;z-index:-1;pointer-events:none;overflow:hidden}
+.blobs i{position:absolute;border-radius:50%;filter:blur(80px);opacity:var(--blob)}
+.blobs i:nth-child(1){width:420px;height:420px;background:var(--lime);right:-120px;top:40px;animation:dr1 16s ease-in-out infinite}
+.blobs i:nth-child(2){width:380px;height:380px;background:var(--violet-300);right:28%;top:280px;animation:dr2 19s ease-in-out infinite}
+.blobs i:nth-child(3){width:300px;height:300px;background:var(--violet-100);left:-80px;top:0;animation:dr1 14s ease-in-out infinite reverse}
+@keyframes dr1{50%{transform:translate(-60px,40px) scale(1.12)}}
+@keyframes dr2{50%{transform:translate(70px,-40px) scale(.9)}}
+.sports{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:26px}
+.sports .lbl{font-size:13.5px;color:var(--muted);font-weight:700;margin-inline-end:4px}
+.sports button{position:relative;display:flex;gap:8px;align-items:center;border-radius:999px;padding:5px 14px 5px 6px;background:var(--surface);border:1.5px solid var(--border);font-weight:700;font-size:14px;transition:all .3s;overflow:hidden}
+.sports button i{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--primary);transition:all .3s}
+.sports button:hover{border-color:var(--primary);transform:translateY(-2px)}
+.sports button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.sports button.on i{background:var(--lime);color:var(--ink);transform:rotate(-12deg)}
+.sports button.on::after{content:"";position:absolute;right:0;bottom:0;height:3px;width:100%;background:var(--lime);transform-origin:right;animation:tick 4s linear forwards}
+.sports.stopped button.on::after{display:none}
+@keyframes tick{from{transform:scaleX(0)}}
+[data-theme="dark"] .sports button.on{background:var(--violet-300);border-color:var(--violet-300);color:var(--ink)}
+.stage{background:#4024D1}
+.stage .bgl{position:absolute;inset:0;opacity:0;transition:opacity .8s ease}
+.stage .bgl.on{opacity:1}
+.stage .glow{transition:background .8s}
+.stage .rings{transition:opacity .8s}
+.stage .spot{position:absolute;inset:0;background:radial-gradient(260px circle at var(--sx,60%) var(--sy,30%),rgba(255,255,255,.22),transparent 65%);pointer-events:none;transition:opacity .3s;opacity:0}
+.stage:hover .spot{opacity:1}
+#pgyms .gym{animation:gin .5s cubic-bezier(.2,.8,.2,1) both}
+#pgyms .gym:nth-child(2){animation-delay:.07s}
+#pgyms .gym:nth-child(3){animation-delay:.14s}
+@keyframes gin{from{opacity:0;transform:translateX(-14px)}}
+.f-cr{transition:transform .3s ease-out,background .5s,color .5s}
+.band.b1{transform:translateY(-50%) rotate(-3.5deg) translateX(var(--bx,0px))}
+.band.b2{transform:translateY(-50%) rotate(3deg) translateX(calc(var(--bx,0px) * -1))}
+#what{background:var(--surface-2)}
+[data-theme="dark"] #what{background:#16131F}
+.feat div{transition:transform .3s,border-color .3s}
+.feat div:hover{transform:translateX(-6px);border-color:var(--violet-300)}
+.feat div i{transition:all .35s cubic-bezier(.3,1.5,.5,1)}
+.feat div:hover i{background:var(--lime);color:var(--ink);transform:rotate(-10deg)}
+.u{background:linear-gradient(var(--u),var(--u)) no-repeat 100% 90%/0% .36em;transition:background-size 1.1s .35s cubic-bezier(.7,0,.2,1)}
+.rv.in .u{background-size:100% .36em}
+.tilt{will-change:transform}
+.tilt::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(320px circle at var(--gx,50%) var(--gy,0%),rgba(255,255,255,.35),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
+.tilt:hover::after{opacity:1}
+.ben:nth-child(1){background:var(--lime);border-color:var(--lime);color:var(--ink)}
+.ben:nth-child(1) li{color:#2B3A08}
+.ben:nth-child(1) .ic{background:var(--ink);color:var(--lime)}
+.ben:nth-child(1) li i{background:rgba(18,19,20,.1);color:var(--ink)}
+.ben:nth-child(3){background:var(--b3);border-color:var(--b3)}
+.ben:nth-child(3) .ic{background:var(--violet);color:#fff}
+.ben:nth-child(3) li i{background:rgba(64,36,209,.14);color:var(--primary)}
+.ben .ic{transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
+.ben:hover .ic{transform:rotate(-14deg) scale(1.1)}
+.ben .deco{animation:spin 18s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.space:hover{box-shadow:0 30px 50px -24px rgba(64,36,209,.6)}
+.how-sec{background:var(--how);color:#fff;position:relative;overflow:hidden;isolation:isolate}
+.how-sec::before{content:"";position:absolute;inset:0;z-index:-1;background-image:radial-gradient(rgba(255,255,255,.14) 1.2px,transparent 1.3px);background-size:24px 24px;-webkit-mask-image:linear-gradient(to bottom,#000,transparent 80%);mask-image:linear-gradient(to bottom,#000,transparent 80%)}
+.how-sec::after{content:"";position:absolute;width:520px;height:520px;border-radius:50%;background:var(--lime);filter:blur(120px);opacity:.22;left:-160px;bottom:-200px;z-index:-1}
+.how-sec h2{color:#fff}
+.how-sec .tag{background:rgba(255,255,255,.12);color:var(--lime)}
+.how-sec .st .txt p{color:rgba(255,255,255,.78)}
+.how-sec .st .no{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.25);color:#fff}
+.how-sec .st.on .no{background:var(--lime);border-color:var(--lime);color:var(--ink);box-shadow:0 0 0 8px rgba(216,255,128,.18),0 0 30px rgba(216,255,128,.5)}
+.how-sec .steps .rail-l{background:rgba(255,255,255,.18)}
+.how-sec .steps .rail-l i{background:var(--lime);box-shadow:0 0 14px var(--lime)}
+.how-sec .st .art{border-color:transparent;box-shadow:0 30px 60px -30px rgba(0,0,0,.5);color:var(--text)}
+.st .art > *{transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.st:not(.on) .art > *{transform:scale(.92) translateY(10px)}
+/* calculator */
+.calc{border-radius:40px;background:var(--lime);color:var(--ink);padding:clamp(26px,5vw,56px);display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,4vw,48px);align-items:center;position:relative;overflow:hidden;isolation:isolate}
+.calc::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;border:70px solid rgba(64,36,209,.08);left:-140px;top:-160px;z-index:-1;animation:spin 30s linear infinite}
+.calc > *{min-width:0}
+.calc .tag{background:var(--ink);color:var(--lime)}
+.calc h2{color:var(--ink)}
+.calc h2 span{color:var(--violet)}
+.calc p{color:#2B3A08}
+.cseg{display:flex;gap:6px;background:rgba(18,19,20,.08);border-radius:16px;padding:5px;margin-top:22px;flex-wrap:wrap}
+.cseg button{flex:1;border-radius:12px;padding:9px 10px;font-weight:800;font-size:14px;color:#2B3A08;transition:all .3s;white-space:nowrap}
+.cseg button.on{background:var(--violet);color:#fff;box-shadow:0 10px 20px -10px rgba(64,36,209,.8)}
+.rl{display:flex;justify-content:space-between;align-items:center;margin-top:22px;font-weight:700}
+.rl b{font-size:24px;font-weight:900;color:var(--violet)}
+.calc input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:12px;border-radius:12px;margin-top:10px;background:linear-gradient(var(--violet),var(--violet)) no-repeat 100% 0/var(--fill,30%) 100%,rgba(18,19,20,.12);cursor:pointer}
+.calc input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;background:var(--ink);border:5px solid #fff;box-shadow:0 6px 14px rgba(0,0,0,.25);transition:transform .2s}
+.calc input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.calc input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--ink);border:5px solid #fff}
+.cweek{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:22px}
+.cweek span{display:grid;justify-items:center;gap:4px;font-size:12px;font-weight:700;color:#2B3A08}
+.cweek i{width:100%;max-width:46px;aspect-ratio:1;border-radius:14px;border:2px dashed rgba(18,19,20,.25);display:grid;place-items:center;color:transparent;transition:all .4s cubic-bezier(.3,1.5,.5,1)}
+.cweek i.on{border:0;background:var(--violet);color:#fff;transform:rotate(-6deg)}
+.cweek span:nth-child(odd) i.on{background:var(--ink);color:var(--lime);transform:rotate(6deg)}
+.cres{background:var(--violet);color:#fff;border-radius:30px;padding:26px;display:grid;gap:16px;box-shadow:0 30px 60px -30px rgba(64,36,209,.8)}
+.cres .o small{display:block;font-size:13px;opacity:.75;font-weight:600}
+.cres .o b{font-size:clamp(34px,4vw,48px);font-weight:900;line-height:1.2;color:var(--lime)}
+.cres .o span{font-size:14px;opacity:.75;margin-inline-start:6px}
+.cbars{display:grid;gap:12px}
+.cbars > div{display:grid;gap:4px;font-size:13px;font-weight:700}
+.cbars .row{display:flex;justify-content:space-between;opacity:.9}
+.cbars .trk{height:14px;border-radius:10px;background:rgba(255,255,255,.12);overflow:hidden}
+.cbars .trk i{display:block;height:100%;border-radius:10px;background:var(--lime);transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.cbars .trk i.b{background:rgba(255,255,255,.55)}
+.cres .note{font-size:12.5px;opacity:.7;color:#fff}
+/* why */
+.wcard.v{background:var(--violet);border-color:var(--violet);color:#fff}
+.wcard.v p{color:rgba(255,255,255,.82)}
+.wcard.v .ck{background:var(--lime);color:var(--ink)}
+.wcard.v .big{color:#fff;opacity:.12}
+.wcard.v .chips span{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.18)}
+.wcard.l{background:var(--l-bg)}
+.wcard .big{transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.wcard:hover .big{transform:rotate(-18deg) scale(1.1)}
+.cta .orb{animation:dr1 12s ease-in-out infinite}
+.cta .orb+.orb{animation:dr2 14s ease-in-out infinite}
+
 @media (max-width:1020px){
   .links{display:none}
   .burger{display:grid}
-  .hero-grid,.what,.why,.cta{grid-template-columns:1fr}
+  .hero-grid,.what,.why,.cta,.calc{grid-template-columns:1fr}
   .stage{max-width:560px;width:100%;margin-inline:auto}
   .bens{grid-template-columns:1fr;max-width:560px;margin-inline:auto}
   .st{grid-template-columns:56px 1fr}
@@ -303,6 +422,7 @@ footer{padding:60px 0 34px}
 @media (max-width:640px){
   body{font-size:15px}
   .wrap{width:calc(100% - 32px)}
+  .rail{margin-inline:-16px;padding-inline:16px}
   section{padding:76px 0}
   .nav{height:68px}
   .nav-end .login{display:none}
@@ -347,6 +467,7 @@ footer{padding:60px 0 34px}
 </style>
 </head>
 <body>
+<div class="progress" id="prog"></div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <symbol id="bolt" viewBox="0 0 24 24"><path d="M13.5 2L4 14h7l-1.5 8L20 10h-7z" fill="currentColor"/></symbol>
   <symbol id="ck" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -396,6 +517,7 @@ footer{padding:60px 0 34px}
 <main>
 <!-- HERO -->
 <section class="hero">
+  <div class="blobs" aria-hidden="true"><i></i><i></i><i></i></div>
   <div class="wrap hero-grid">
     <div>
       <span class="tag rv"><svg width="14" height="14"><use href="#bolt"/></svg>دسترسی به فضاهای تمرینی</span>
@@ -405,6 +527,12 @@ footer{padding:60px 0 34px}
         <a href="#join" class="btn btn-primary">شروع کن — رایگان <svg class="ar" width="18" height="18"><use href="#ar"/></svg></a>
         <a href="#spaces" class="btn btn-line">مشاهده‌ی فضاهای تمرینی</a>
       </div>
+      <div class="sports rv d3" id="sports"><span class="lbl">امروز حال چی داری؟</span>
+        <button data-k="fit" class="on"><i><svg width="16" height="16"><use href="#s-fit"/></svg></i>بدنسازی</button>
+        <button data-k="yoga"><i><svg width="16" height="16"><use href="#s-yoga"/></svg></i>یوگا</button>
+        <button data-k="swim"><i><svg width="16" height="16"><use href="#s-swim"/></svg></i>شنا</button>
+        <button data-k="cross"><i><svg width="16" height="16"><use href="#s-cross"/></svg></i>کراس‌فیت</button>
+      </div>
       <div class="stats rv d3">
         <div><b data-count="120">۰</b><span>باشگاه همکار</span></div>
         <div><b data-count="8">۰</b><span>رشته‌ی ورزشی</span></div>
@@ -413,21 +541,26 @@ footer{padding:60px 0 34px}
     </div>
 
     <div class="stage rv d2" id="stage">
+      <div class="bgl on" data-k="fit" style="background:radial-gradient(120% 90% at 85% 0%,#6A4FF0 0%,#4024D1 45%,#2A159E 100%)"></div>
+      <div class="bgl" data-k="yoga" style="background:radial-gradient(120% 90% at 85% 0%,#F4FFDD 0%,#D8FF80 45%,#A9DB45 100%)"></div>
+      <div class="bgl" data-k="swim" style="background:radial-gradient(120% 90% at 85% 0%,#E2DAFF 0%,#B6A2FF 45%,#7558EE 100%)"></div>
+      <div class="bgl" data-k="cross" style="background:radial-gradient(120% 90% at 85% 0%,#3A3B42 0%,#1C1D20 45%,#0B0B0C 100%)"></div>
       <div class="grid"></div>
+      <div class="spot"></div>
       <svg class="rings" viewBox="0 0 400 400"><g fill="none" stroke="#fff" stroke-width="1"><circle cx="200" cy="200" r="80"/><circle cx="200" cy="200" r="130"/><circle cx="200" cy="200" r="180"/></g></svg>
       <div class="glow"></div>
       <div class="phone" data-depth="6">
         <div class="scr">
           <div class="hi"><span><span style="color:var(--gray)">سلام سارا 👋</span><b>امروز کجا تمرین کنیم؟</b></span><i>س</i></div>
           <div class="wal"><span class="ch">+۵۰ هدیه</span><small>موجودی کیف پول</small><b>۴۸۰ کردیت</b><small>سطح: پلاس</small></div>
-          <div class="cats"><span class="on">همه</span><span>بدنسازی</span><span>یوگا</span><span>شنا</span></div>
-          <div class="gym"><span class="th" style="background:var(--violet-100);color:var(--violet)"><svg width="18" height="18"><use href="#s-fit"/></svg></span><span class="tx"><b>باشگاه آریا · ونک</b><em>۸۰۰ متر · <span style="color:var(--ok)">۱۴ جای خالی</span></em></span><span class="cr">۱۲</span></div>
+          <div class="cats" id="pcats"><span class="on">بدنسازی</span><span>یوگا</span><span>شنا</span><span>کراس‌فیت</span></div>
+          <div id="pgyms" style="display:grid;gap:9px"><div class="gym"><span class="th" style="background:var(--violet-100);color:var(--violet)"><svg width="18" height="18"><use href="#s-fit"/></svg></span><span class="tx"><b>باشگاه آریا · ونک</b><em>۸۰۰ متر · <span style="color:var(--ok)">۱۴ جای خالی</span></em></span><span class="cr">۱۲</span></div>
           <div class="gym"><span class="th" style="background:#F2FFD6;color:#4D6B00"><svg width="18" height="18"><use href="#s-yoga"/></svg></span><span class="tx"><b>استودیو نیلوفر · جردن</b><em>۱٫۲ کیلومتر · <span style="color:#C27C00">۳ جای خالی</span></em></span><span class="cr">۸</span></div>
-          <div class="gym"><span class="th" style="background:var(--violet-50);color:var(--violet)"><svg width="18" height="18"><use href="#s-swim"/></svg></span><span class="tx"><b>مجموعه آبی کوهسار</b><em>۲ کیلومتر · <span style="color:var(--ok)">۲۲ جای خالی</span></em></span><span class="cr">۲۰</span></div>
+          <div class="gym"><span class="th" style="background:var(--violet-50);color:var(--violet)"><svg width="18" height="18"><use href="#s-swim"/></svg></span><span class="tx"><b>مجموعه آبی کوهسار</b><em>۲ کیلومتر · <span style="color:var(--ok)">۲۲ جای خالی</span></em></span><span class="cr">۲۰</span></div></div>
         </div>
       </div>
-      <div class="float f-cr" data-depth="18">⚡ ۱۲ کردیت / جلسه</div>
-      <div class="float f-cap" data-depth="14"><b>ظرفیت امروز</b><span style="color:var(--muted)">باشگاه آریا · ۱۸:۰۰</span><div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="lm"></i><i></i><i></i></div></div>
+      <div class="float f-cr" data-depth="18" id="fcr">⚡ ۱۲ کردیت / جلسه</div>
+      <div class="float f-cap" data-depth="14"><b>ظرفیت امروز</b><span style="color:var(--muted)" id="fcap">باشگاه آریا · ۱۸:۰۰</span><div class="meter" id="fmeter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="lm"></i><i></i><i></i></div></div>
       <div class="float f-ok" data-depth="22"><span class="ic"><svg width="18" height="18"><use href="#ck"/></svg></span><span><b>ورود ثبت شد</b><small>۱۲ کردیت کسر شد</small></span></div>
     </div>
   </div>
@@ -444,7 +577,7 @@ footer{padding:60px 0 34px}
   <div class="wrap what">
     <div>
       <span class="tag rv">معرفی</span>
-      <h2 class="rv d1">CityRep دقیقاً چه کاری انجام می‌دهد؟</h2>
+      <h2 class="rv d1">CityRep دقیقاً چه کاری <span class="u">انجام می‌دهد؟</span></h2>
       <p class="p rv d2">CityRep یک پلتفرم دسترسی به فضاهای تمرینی در سطح شهر است. به جای عضویت در یک باشگاه مشخص، به شبکه‌ای از باشگاه‌های همکار وصل می‌شوی و هر روز، بر اساس نیاز و سبک زندگی‌ات، جایی را برای تمرین انتخاب می‌کنی.</p>
       <div class="feat">
         <div class="rv d1"><i><svg width="22" height="22"><use href="#wallet"/></svg></i><span><b>یک کیف پول برای همه‌جا</b><small>اعتبار را شارژ کن و فقط به اندازه‌ی جلسه‌هایی که می‌روی پرداخت کن.</small></span></div>
@@ -470,20 +603,20 @@ footer{padding:60px 0 34px}
 <!-- BENEFITS -->
 <section id="benefits" style="background:var(--surface);border-block:1px solid var(--border)">
   <div class="wrap">
-    <div class="head"><span class="tag rv">مزایا در یک نگاه</span><h2 class="rv d1">برای هر کسی که در این شبکه است</h2><p class="rv d2">ورزشکار، مربی یا صاحب باشگاه؛ CityRep برای هر سه طرف ارزش می‌سازد.</p></div>
+    <div class="head"><span class="tag rv">مزایا در یک نگاه</span><h2 class="rv d1">برای <span class="u">هر کسی</span> که در این شبکه است</h2><p class="rv d2">ورزشکار، مربی یا صاحب باشگاه؛ CityRep برای هر سه طرف ارزش می‌سازد.</p></div>
     <div class="bens">
-      <div class="ben rv">
+      <div class="ben tilt rv">
         <div class="ic"><svg width="26" height="26"><use href="#user"/></svg></div>
         <h3>برای کاربران</h3>
         <ul><li><i><svg width="13" height="13"><use href="#ck"/></svg></i>آزادی انتخاب سبک تمرین</li><li><i><svg width="13" height="13"><use href="#ck"/></svg></i>بدون تعهد بلندمدت</li><li><i><svg width="13" height="13"><use href="#ck"/></svg></i>یک حساب کاربری، چندین باشگاه</li></ul>
       </div>
-      <div class="ben hl rv d1">
+      <div class="ben hl tilt rv d1">
         <span class="deco"></span>
         <div class="ic"><svg width="26" height="26"><use href="#coach"/></svg></div>
         <h3>برای مربیان</h3>
         <ul><li><i><svg width="13" height="13"><use href="#ck"/></svg></i>دسترسی به باشگاه‌های متنوع</li><li><i><svg width="13" height="13"><use href="#ck"/></svg></i>جابجایی راحت برای تغییر باشگاه</li><li><i><svg width="13" height="13"><use href="#ck"/></svg></i>ارتباط با شاگردان بیشتر</li></ul>
       </div>
-      <div class="ben rv d2">
+      <div class="ben tilt rv d2">
         <div class="ic"><svg width="26" height="26"><use href="#gym"/></svg></div>
         <h3>برای باشگاه‌ها</h3>
         <ul><li><i><svg width="13" height="13"><use href="#ck"/></svg></i>دسترسی به کاربران جدید</li><li><i><svg width="13" height="13"><use href="#ck"/></svg></i>استفاده‌ی بهتر از ظرفیت موجود</li><li><i><svg width="13" height="13"><use href="#ck"/></svg></i>همکاری ساده و ساختارمند</li></ul>
@@ -496,7 +629,7 @@ footer{padding:60px 0 34px}
 <section id="spaces">
   <div class="wrap">
     <div class="sp-head">
-      <div><span class="tag rv">رشته‌ها</span><h2 class="rv d1" style="margin-bottom:0">فضاهای تمرینی تحت پوشش</h2></div>
+      <div><span class="tag rv">رشته‌ها</span><h2 class="rv d1" style="margin-bottom:0">فضاهای تمرینی <span class="u">تحت پوشش</span></h2></div>
       <div class="arrows rv"><button id="prev" aria-label="قبلی"><svg width="20" height="20" style="transform:scaleX(-1)"><use href="#ar"/></svg></button><button id="next" aria-label="بعدی"><svg width="20" height="20"><use href="#ar"/></svg></button></div>
     </div>
     <div class="rail rv" id="rail"></div>
@@ -505,7 +638,7 @@ footer{padding:60px 0 34px}
 </section>
 
 <!-- HOW -->
-<section id="how" style="background:var(--surface);border-block:1px solid var(--border)">
+<section id="how" class="how-sec">
   <div class="wrap">
     <div class="head"><span class="tag rv">چهار قدم ساده</span><h2 class="rv d1">چگونه کار می‌کند؟</h2></div>
     <div class="steps" id="steps">
@@ -534,19 +667,45 @@ footer{padding:60px 0 34px}
   </div>
 </section>
 
-<!-- WHY -->
-<section id="why">
+<!-- CALC -->
+<section id="calc">
   <div class="wrap">
-    <div class="head"><span class="tag rv">چرا CityRep</span><h2 class="rv d1">تمرین باید با تو تغییر کند</h2></div>
+    <div class="calc rv">
+      <div>
+        <span class="tag">ماشین‌حساب کیف پول</span>
+        <h2>ماهی چقدر <span>کردیت</span> لازم داری؟</h2>
+        <p>تعداد جلسه‌های هفته و سطح باشگاه را انتخاب کن. CityRep فقط جلسه‌هایی را حساب می‌کند که واقعاً می‌روی.</p>
+        <div class="cseg" id="cTier"><button data-c="8">پایه · ۸ کردیت</button><button data-c="12" class="on">پلاس · ۱۲</button><button data-c="20">پریمیوم · ۲۰</button></div>
+        <label class="rl" for="cR"><span>جلسه در هفته</span><b id="cN">۳</b></label>
+        <input type="range" id="cR" min="1" max="7" value="3" aria-label="جلسه در هفته">
+        <div class="cweek" id="cWeek"></div>
+      </div>
+      <div class="cres">
+        <div class="o"><small>کردیت لازم در ماه</small><b id="cCr">۰</b><span>کردیت</span></div>
+        <div class="o"><small>هزینه‌ی تقریبی ماهانه</small><b id="cT">۰</b><span>هزار تومان</span></div>
+        <div class="cbars">
+          <div><span class="row"><span>با CityRep</span><span id="bAv"></span></span><span class="trk"><i id="bA"></i></span></div>
+          <div><span class="row"><span>عضویت ثابت در ۳ باشگاه</span><span id="bBv"></span></span><span class="trk"><i id="bB" class="b"></i></span></div>
+        </div>
+        <p class="note">با فرض هر کردیت ۱۲ هزار تومان و شهریه‌ی ماهانه‌ی ۱٫۵ میلیون تومان برای هر باشگاه؛ ارقام نمونه‌اند.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why" style="padding-top:0">
+  <div class="wrap">
+    <div class="head"><span class="tag rv">چرا CityRep</span><h2 class="rv d1">تمرین باید <span class="u">با تو</span> تغییر کند</h2></div>
     <div class="why">
-      <div class="wcard v rv">
+      <div class="wcard v tilt rv">
         <svg class="big" viewBox="0 0 32 32"><use href="#s-fit"/></svg>
         <span class="ck"><svg width="20" height="20"><use href="#ck"/></svg></span>
         <h3>بدون وابستگی به یک باشگاه یا قرارداد ثابت</h3>
         <p>اشتراک‌های ماهانه، شما را به یک مکان محدود می‌کنند؛ حتی روزهایی که نمی‌روید یا شرایط‌تان تغییر کرده. در CityRep هر روز تصمیم می‌گیری کجا تمرین کنی و فقط برای همان پرداخت می‌کنی.</p>
         <div class="chips"><span>بدون قرارداد</span><span>پرداخت به اندازه‌ی مصرف</span><span>کردیت بدون انقضا</span></div>
       </div>
-      <div class="wcard l rv d1">
+      <div class="wcard l tilt rv d1">
         <svg class="big" viewBox="0 0 32 32"><use href="#s-power"/></svg>
         <span class="ck"><svg width="20" height="20"><use href="#ck"/></svg></span>
         <h3>یک باشگاه برای همه‌ی اهداف کافی نیست</h3>
@@ -715,6 +874,98 @@ $$('[data-count]').forEach(el => co.observe(el));
   const F=(x,y)=>`<rect x="${x}" y="${y}" width="7" height="7" fill="#121314"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="#4024D1"/>`;
   for(let y=0;y<21;y++)for(let x=0;x<21;x++){ const f=(x<8&&y<8)||(x>12&&y<8)||(x<8&&y>12); if(!f&&rnd()>.5) h+=`<rect x="${x}" y="${y}" width="1" height="1" fill="#121314"/>`; }
   $('#qr').innerHTML = h+F(0,0)+F(14,0)+F(0,14);
+})();
+
+/* ===== v2 interactions ===== */
+/* scroll progress + scroll-reactive bands */
+(function(){
+  const prog = $('#prog'), bands = $('.bands');
+  const upd = () => {
+    const h = document.documentElement.scrollHeight - innerHeight;
+    prog.style.setProperty('--p', h > 0 ? scrollY / h : 0);
+    if (!reduce){ const r = bands.getBoundingClientRect(); bands.style.setProperty('--bx', ((innerHeight - r.top) * .18).toFixed(1) + 'px'); }
+  };
+  addEventListener('scroll', upd, {passive:true}); upd();
+})();
+
+/* hero sport switcher: recolors the stage and swaps the phone */
+(function(){
+  const D = {
+    fit:{glow:'#D8FF80',cr:'۱۲',cap:'باشگاه آریا · ۱۸:۰۰',fill:6,g:[['s-fit','باشگاه آریا · ونک','۸۰۰ متر','۱۴ جای خالی','ok','۱۲'],['s-power','پاورهاوس · سعادت‌آباد','۱٫۸ کیلومتر','۳ جای خالی','warn','۸'],['s-func','فانکشنال‌لب · جردن','۲ کیلومتر','۲۰ جای خالی','ok','۱۲']]},
+    yoga:{glow:'#4024D1',cr:'۸',cap:'استودیو نیلوفر · ۱۹:۰۰',fill:3,g:[['s-yoga','استودیو نیلوفر · جردن','۱٫۲ کیلومتر','۵ جای خالی','warn','۸'],['s-pil','پیلاتس آوا · ونک','۹۰۰ متر','۱۱ جای خالی','ok','۱۲'],['s-yoga','خانه‌ی ماه · زعفرانیه','۳ کیلومتر','۸ جای خالی','ok','۲۰']]},
+    swim:{glow:'#D8FF80',cr:'۲۰',cap:'مجموعه آبی کوهسار · ۱۷:۰۰',fill:7,g:[['s-swim','مجموعه آبی کوهسار','۲ کیلومتر','۲۲ جای خالی','ok','۲۰'],['s-swim','استخر نیلوفر · یوسف‌آباد','۱٫۴ کیلومتر','۹ جای خالی','ok','۱۲'],['s-swim','آکوا ژاله · پونک','۴ کیلومتر','۲ جای خالی','warn','۲۰']]},
+    cross:{glow:'#D8FF80',cr:'۱۲',cap:'باکس ۲۲ · ۲۰:۰۰',fill:5,g:[['s-cross','باکس ۲۲ · شهرک غرب','۱ کیلومتر','۶ جای خالی','ok','۱۲'],['s-mart','رینگ آزادی · ستارخان','۲٫۶ کیلومتر','۴ جای خالی','warn','۸'],['s-cross','کراس‌باکس شرق · پیروزی','۵ کیلومتر','۱۶ جای خالی','ok','۸']]}
+  };
+  const keys = Object.keys(D), wrap = $('#sports'), btns = $$('#sports button'), stage = $('#stage');
+  const th = ['background:var(--violet-100);color:var(--violet)','background:#F2FFD6;color:#4D6B00','background:var(--violet-50);color:var(--violet)'];
+  let cur = 'fit', timer = null;
+  function set(k){
+    cur = k; const d = D[k];
+    btns.forEach(b => { b.classList.remove('on'); void b.offsetWidth; b.classList.toggle('on', b.dataset.k === k); });
+    $$('#stage .bgl').forEach(l => l.classList.toggle('on', l.dataset.k === k));
+    $('#stage .glow').style.background = d.glow;
+    $$('#pcats span').forEach((s,i) => s.classList.toggle('on', i === keys.indexOf(k)));
+    $('#pgyms').innerHTML = d.g.map(([ic,n,dist,cap,st,cr],i) => `<div class="gym"><span class="th" style="${th[i]}"><svg width="18" height="18"><use href="#${ic}"/></svg></span><span class="tx"><b>${n}</b><em>${dist} · <span style="color:${st==='ok'?'var(--ok)':'#C27C00'}">${cap}</span></em></span><span class="cr">${cr}</span></div>`).join('');
+    const fcr = $('#fcr'); fcr.textContent = `⚡ ${d.cr} کردیت / جلسه`;
+    fcr.style.background = k === 'yoga' ? 'var(--violet)' : 'var(--lime)'; fcr.style.color = k === 'yoga' ? '#fff' : 'var(--ink)';
+    $('#fcap').textContent = d.cap;
+    $$('#fmeter i').forEach((m,i) => m.className = i < d.fill ? 'on' : (i === d.fill ? 'lm' : ''));
+    $('#stage .rings').style.opacity = k === 'yoga' ? '.5' : '';
+  }
+  btns.forEach(b => b.onclick = () => { clearInterval(timer); wrap.classList.add('stopped'); set(b.dataset.k); });
+  set('fit');
+  if (reduce) wrap.classList.add('stopped');
+  else timer = setInterval(() => set(keys[(keys.indexOf(cur)+1) % keys.length]), 4000);
+  if (!reduce && !matchMedia('(hover:none)').matches) stage.addEventListener('mousemove', e => {
+    const r = stage.getBoundingClientRect();
+    stage.style.setProperty('--sx', (e.clientX-r.left)+'px'); stage.style.setProperty('--sy', (e.clientY-r.top)+'px');
+  });
+})();
+
+/* tilt + glare on cards */
+(function(){
+  if (reduce || matchMedia('(hover:none)').matches) return;
+  $$('.tilt').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect(), x = (e.clientX-r.left)/r.width, y = (e.clientY-r.top)/r.height;
+      el.style.transform = `perspective(900px) rotateX(${(.5-y)*8}deg) rotateY(${(x-.5)*10}deg) translateY(-6px)`;
+      el.style.setProperty('--gx', x*100+'%'); el.style.setProperty('--gy', y*100+'%');
+    });
+    el.addEventListener('mouseleave', () => el.style.transform = '');
+  });
+})();
+
+/* magnetic buttons */
+(function(){
+  if (reduce || matchMedia('(hover:none)').matches) return;
+  $$('.btn-primary,.btn-lime').forEach(b => {
+    b.addEventListener('mousemove', e => { const r = b.getBoundingClientRect(); b.style.transform = `translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.3}px)`; });
+    b.addEventListener('mouseleave', () => b.style.transform = '');
+  });
+})();
+
+/* wallet calculator */
+(function(){
+  const PRICE = 12, FIXED = 4500; // thousand toman
+  const days = ['ش','ی','د','س','چ','پ','ج'], order = [0,2,4,1,3,5,6];
+  const r = $('#cR'), tiers = $$('#cTier button');
+  let c = 12, lastCr = 0, lastT = 0;
+  $('#cWeek').innerHTML = days.map(d => `<span><i><svg width="16" height="16"><use href="#ck"/></svg></i>${d}</span>`).join('');
+  function tw(el,a,b){ if (reduce){ el.textContent = fa(b); return; } const t0 = performance.now(); (function f(t){ const p = Math.min(1,(t-t0)/600), v = Math.round(a+(b-a)*(1-Math.pow(1-p,3))); el.textContent = fa(v); if (p<1) requestAnimationFrame(f); })(t0); }
+  function upd(){
+    const n = +r.value, cr = Math.round(n*4.3*c), t = cr*PRICE;
+    $('#cN').textContent = fa(n);
+    r.style.setProperty('--fill', ((n-1)/6*100)+'%');
+    const on = new Set(order.slice(0,n));
+    $$('#cWeek i').forEach((el,i) => el.classList.toggle('on', on.has(i)));
+    tw($('#cCr'),lastCr,cr); tw($('#cT'),lastT,t); lastCr = cr; lastT = t;
+    const mx = Math.max(t,FIXED);
+    $('#bA').style.width = (t/mx*100)+'%'; $('#bB').style.width = (FIXED/mx*100)+'%';
+    $('#bAv').textContent = fa(t)+' هزار'; $('#bBv').textContent = fa(FIXED)+' هزار';
+  }
+  r.addEventListener('input', upd);
+  tiers.forEach(b => b.onclick = () => { tiers.forEach(x => x.classList.toggle('on', x===b)); c = +b.dataset.c; upd(); });
+  upd();
 })();
 </script>
 </body>
