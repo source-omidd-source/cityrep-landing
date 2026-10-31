@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مسیرهای طراحی CityRep</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@300..900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAFAF8;--card:#fff;--ink:#16151A;--ink-2:#4A4950;--muted:#87868E;--line:#E8E7EC;--soft:#F2F1F5;--a:#FF4D1A;--b:#4024D1;--lime:#D8FF80;--a-soft:#FFE3D6;--a-ink:#B33100;--b-soft:#F1EEFF;--b-ink:#4024D1;--on-c:#fff;--tip-bg:#16151A;--tip-fg:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121216;--card:#1B1B21;--ink:#F3F2F7;--ink-2:#C4C3CC;--muted:#8D8C96;--line:#2C2B33;--soft:#24232B;--a:#FF6A3D;--b:#8F7BFF;--a-soft:#3A2016;--a-ink:#FF9B7A;--b-soft:#241E44;--b-ink:#B6A2FF;--on-c:#fff;--tip-bg:#F3F2F7;--tip-fg:#16151A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121216;--card:#1B1B21;--ink:#F3F2F7;--ink-2:#C4C3CC;--muted:#8D8C96;--line:#2C2B33;--soft:#24232B;--a:#FF6A3D;--b:#8F7BFF;--a-soft:#3A2016;--a-ink:#FF9B7A;--b-soft:#241E44;--b-ink:#B6A2FF;--on-c:#fff;--tip-bg:#F3F2F7;--tip-fg:#16151A;color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Vazirmatn',system-ui,Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.85;-webkit-font-smoothing:antialiased;font-size:16px}
+.page{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));overflow-x:hidden}
+h1,h2,h3{text-wrap:balance}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.wrap{width:min(1240px,100%);margin-inline:auto}
+header{padding:56px 0 30px}
+.kicker{display:inline-flex;gap:8px;align-items:center;font-size:13px;font-weight:700;color:var(--muted);border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 14px}
+h1{font-size:clamp(32px,4.4vw,56px);font-weight:900;letter-spacing:-1.2px;line-height:1.3;margin:18px 0 12px}
+.lead{font-size:18px;color:var(--ink-2);max-width:46em}
+.brief{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px}
+.brief div{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px}
+.brief b{display:block;font-size:15px;margin-bottom:4px}
+.brief span{font-size:14px;color:var(--ink-2)}
+.brief i{font-style:normal;display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--soft);font-weight:900;margin-bottom:10px}
+
+.dir,.note{min-width:0}
+.dirs{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:40px 0 30px}
+.dir{background:var(--card);border:1px solid var(--line);border-radius:30px;overflow:hidden;display:flex;flex-direction:column}
+.pv{position:relative;aspect-ratio:16/10;max-width:100%;overflow:hidden;background:var(--soft);border-bottom:1px solid var(--line)}
+.pv iframe{position:absolute;top:0;right:0;width:1440px;height:900px;border:0;transform-origin:top right;pointer-events:none}
+.pv .open{position:absolute;inset:0;display:grid;place-items:center;background:rgba(20,20,20,0);transition:background .3s;z-index:2}
+.pv .open span{opacity:0;transform:translateY(8px);transition:all .3s;background:#16151A;color:#fff;border-radius:999px;padding:10px 20px;font-weight:700;font-size:14px}
+.pv:hover .open{background:rgba(20,20,20,.25)}
+.pv:hover .open span{opacity:1;transform:none}
+.body{padding:28px;display:flex;flex-direction:column;gap:18px;flex:1}
+.ttl{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.ttl h2{font-size:26px;font-weight:900;letter-spacing:-.5px;line-height:1.4}
+.badge{font-size:12.5px;font-weight:800;border-radius:999px;padding:4px 12px;white-space:nowrap}
+.desc{color:var(--ink-2)}
+.spec{display:grid;grid-template-columns:110px 1fr;gap:10px 16px;font-size:14.5px;border-top:1px dashed var(--line);padding-top:18px}
+.spec dt{color:var(--muted);font-weight:700}
+.sw{display:flex;gap:6px;flex-wrap:wrap}
+.sw span{width:26px;height:26px;border-radius:8px;border:1px solid rgba(0,0,0,.08);position:relative}
+.sw span:hover::after{content:attr(title);position:absolute;bottom:120%;right:50%;translate:50% 0;background:var(--tip-bg);color:var(--tip-fg);font-size:11px;padding:2px 8px;border-radius:6px;direction:ltr;white-space:nowrap}
+ul.pts{list-style:none;display:grid;gap:8px;font-size:14.5px;color:var(--ink-2)}
+ul.pts li{display:flex;gap:10px}
+ul.pts li::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;margin-top:10px;background:var(--c)}
+.acts{display:flex;gap:10px;margin-top:auto;padding-top:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 20px;border-radius:14px;font-weight:700;font-size:15px;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.p{background:var(--c);color:var(--on-c)}
+.btn:focus-visible,.pv:focus-visible{outline:3px solid var(--c);outline-offset:3px}
+.btn.s{border:1.5px solid var(--line)}
+
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-bottom:60px}
+.note{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:26px}
+.note h3{font-size:19px;font-weight:900;margin-bottom:12px}
+.note p,.note li{font-size:14.5px;color:var(--ink-2)}
+.note ol{padding-inline-start:20px;display:grid;gap:8px}
+table{width:100%;min-width:320px;border-collapse:collapse;font-size:14px;margin-top:6px}
+td,th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
+th{color:var(--muted);font-size:12.5px}
+td code{direction:ltr;display:inline-block;font-family:ui-monospace,Consolas,monospace;font-size:13px}
+.chip{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:middle;margin-inline-end:6px;border:1px solid rgba(0,0,0,.1)}
+footer{padding:30px 0 50px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(15,15,15,.6);backdrop-filter:blur(6px);display:none;place-items:center;padding:calc(20px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px))}
+.modal.open{display:grid}
+.dev{width:min(410px,92vw);height:min(860px,88vh);border-radius:52px;background:#0E0E0E;padding:12px;box-shadow:0 40px 100px rgba(0,0,0,.5);position:relative}
+.dev iframe{width:100%;height:100%;border:0;border-radius:40px;background:#fff}
+.x{position:absolute;top:-14px;left:-14px;z-index:2;width:44px;height:44px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+
+@media (max-width:900px){
+  .dirs,.notes{grid-template-columns:1fr}
+  .brief{grid-template-columns:1fr 1fr}
+}
+@media (max-width:520px){
+  header{padding-top:34px}
+  .brief{grid-template-columns:1fr}
+  .spec{grid-template-columns:1fr;gap:4px}
+  .spec dd{margin-bottom:8px}
+  .body{padding:20px}
+}
+</style>
+</head>
+<body>
+<div dir="rtl" lang="fa" class="page">
+<header class="wrap">
+  <span class="kicker">CityRep · پیشنهاد طراحی صفحه‌ی اصلی</span>
+  <h1>دو مسیر طراحی، برای یک تصمیم</h1>
+  <p class="lead">بر اساس توضیح پروژه، دو نسخه‌ی کامل و قابل کلیک آماده شده است: یکی از صفر و بدون هیچ پیش‌فرضی، و یکی بازطراحی همین هویت فعلی با رنگ‌های موجود. هر دو <b>روشن (Light)</b> طراحی شده‌اند، همان‌طور که ترجیح دکتر هاشمی است.</p>
+  <div class="brief">
+    <div><i>۱</i><b>شارژ کیف پول</b><span>کاربر یک بار اعتبار می‌خرد؛ به کردیت تبدیل می‌شود.</span></div>
+    <div><i>۲</i><b>سطح‌بندی باشگاه‌ها</b><span>بر اساس خدمات و امکانات؛ هر سطح، هزینه‌ی مشخص.</span></div>
+    <div><i>۳</i><b>ظرفیت اعلامی</b><span>هر باشگاه ظرفیت خالی ساعت‌هایش را اعلام می‌کند.</span></div>
+    <div><i>۴</i><b>کسر به ازای ورود</b><span>امروز باشگاه X، فردا باشگاه Y؛ کردیت همان جلسه کسر می‌شود.</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="dirs">
+    <!-- A -->
+    <article class="dir" style="--c:var(--a)">
+      <a class="pv" href="a/index.html" target="_blank"><iframe src="a/index.html" title="نسخه‌ی A" loading="lazy" tabindex="-1"></iframe><span class="open"><span>باز کردن نسخه‌ی کامل</span></span></a>
+      <div class="body">
+        <div class="ttl"><h2>A — «پاس شهری»</h2><span class="badge" style="background:var(--a-soft);color:var(--a-ink)">طراحی از صفر</span></div>
+        <p class="desc">CityRep مثل کارت مترو، ولی برای باشگاه‌ها: هر رشته‌ی ورزشی یک «خط» روی نقشه‌ی شهر است و هر باشگاه یک «ایستگاه». مفهومی که بدون توضیح، مدل کسب‌وکار را منتقل می‌کند.</p>
+        <dl class="spec">
+          <dt>فونت</dt><dd><span style="font-family:Lalezar;font-size:19px">لاله‌زار</span> برای تیترها (پوستری و ورزشی) + وزیرمتن برای متن</dd>
+          <dt>رنگ</dt><dd><div class="sw"><span style="background:#F4F1EA" title="#F4F1EA"></span><span style="background:#15140F" title="#15140F"></span><span style="background:#FF4D1A" title="#FF4D1A"></span><span style="background:#7A5CFA" title="#7A5CFA"></span><span style="background:#0E9BDB" title="#0E9BDB"></span><span style="background:#F2AE00" title="#F2AE00"></span><span style="background:#1FA866" title="#1FA866"></span></div></dd>
+          <dt>حس</dt><dd>کاغذی و گرم، پرانرژی، مجله‌ای</dd>
+        </dl>
+        <ul class="pts">
+          <li>نقشه‌ی خطوط تعاملی (روی ایستگاه‌ها برو، خطوط را فیلتر کن) + کارت پاس سه‌بعدی</li>
+          <li>«تابلوی حرکت» زنده‌ی ظرفیت باشگاه‌ها با انیمیشن ورق‌خوردن اعداد</li>
+          <li>اسکرول داستانی «چطور کار می‌کند» با گوشی که صفحه‌اش هم‌زمان عوض می‌شود</li>
+          <li>بلیت‌های سطح‌بندی + ماشین‌حساب هزینه‌ی ماهانه در برابر عضویت ثابت</li>
+        </ul>
+        <div class="acts"><a class="btn p" href="a/index.html" target="_blank">مشاهده‌ی دسکتاپ</a><button class="btn s" data-m="a/index.html">پیش‌نمایش موبایل</button></div>
+      </div>
+    </article>
+
+    <!-- B -->
+    <article class="dir" style="--c:var(--b)">
+      <a class="pv" href="b/index.html" target="_blank"><iframe src="b/index.html" title="نسخه‌ی B" loading="lazy" tabindex="-1"></iframe><span class="open"><span>باز کردن نسخه‌ی کامل</span></span></a>
+      <div class="body">
+        <div class="ttl"><h2>B — بازطراحی هویت فعلی</h2><span class="badge" style="background:var(--b-soft);color:var(--b-ink)">پالت موجود</span></div>
+        <p class="desc">همان ساختار و محتوای طرح قبلی، همان بنفش و لیمویی برند، اما روشن، خواناتر و با سلسله‌مراتب واضح‌تر. رنگ‌ها دقیقاً از فایل Colors.png گرفته شده‌اند و نسخه‌ی تیره هم با یک کلیک در دسترس است.</p>
+        <dl class="spec">
+          <dt>فونت</dt><dd>وزیرمتن (۳۰۰ تا ۹۰۰)؛ یک خانواده، مقیاس تایپوگرافی منظم</dd>
+          <dt>رنگ</dt><dd><div class="sw"><span style="background:#F8F8F8" title="#F8F8F8"></span><span style="background:#121314" title="#121314"></span><span style="background:#71717A" title="#71717A"></span><span style="background:#4024D1" title="#4024D1"></span><span style="background:#B6A2FF" title="#B6A2FF"></span><span style="background:#E2DAFF" title="#E2DAFF"></span><span style="background:#F1EEFF" title="#F1EEFF"></span><span style="background:#D8FF80" title="#D8FF80"></span><span style="background:#22C55E" title="#22C55E"></span></div></dd>
+          <dt>حس</dt><dd>تمیز، تکنولوژیک، قابل اعتماد</dd>
+        </dl>
+        <ul class="pts">
+          <li>هیرو روشن با «صحنه»ی بنفش، گوشی واقعی اپ و کارت‌های شناور (پارالاکس)</li>
+          <li>نوارهای متقاطع بنفش/لیمویی، امضای طرح قبلی، حالا روان‌تر</li>
+          <li>شبیه‌ساز «عضویت سنتی در برابر CityRep» که دسترسی در شهر را نشان می‌دهد</li>
+          <li>کاروسل رشته‌ها، مراحل با نوار پیشرفت اسکرولی، تم تیره‌ی اختیاری</li>
+        </ul>
+        <div class="acts"><a class="btn p" href="b/index.html" target="_blank">مشاهده‌ی دسکتاپ</a><button class="btn s" data-m="b/index.html">پیش‌نمایش موبایل</button></div>
+      </div>
+    </article>
+  </div>
+
+  <div class="notes">
+    <div class="note">
+      <h3>چه چیزهایی نسبت به طرح قبلی بهتر شد (نسخه‌ی B)</h3>
+      <ol>
+        <li>تم روشن به‌عنوان پیش‌فرض؛ تیره فقط به‌صورت اختیاری.</li>
+        <li>کنتراست متن‌ها: در طرح قبلی متن‌های خاکستری ریز روی زمینه‌ی تیره خوانا نبودند.</li>
+        <li>لیمویی فقط به‌عنوان پس‌زمینه با متن تیره استفاده شده؛ متن لیمویی روی سفید خوانا نیست.</li>
+        <li>مدل کیف پول، کردیت و ظرفیت (هسته‌ی کسب‌وکار) حالا در خود صفحه نمایش داده می‌شود، نه فقط در متن.</li>
+        <li>یک خانواده‌ی فونت با وزن‌های مشخص، به جای ترکیب‌های ناهماهنگ.</li>
+      </ol>
+    </div>
+    <div class="note">
+      <h3>نکته درباره‌ی فایل رنگ‌ها</h3>
+      <p>چند برچسب در Colors.png با رنگ واقعی خانه‌ها یکی نیست. مقدار واقعی از خود تصویر استخراج شده است:</p>
+      <div style="overflow-x:auto"><table>
+        <tr><th>خانه</th><th>برچسب در فایل</th><th>رنگ واقعی</th></tr>
+        <tr><td>لیمویی</td><td><code>#4024D1</code></td><td><span class="chip" style="background:#D8FF80"></span><code>#D8FF80</code></td></tr>
+        <tr><td>بنفش روشن ۲</td><td><code>#E2DAFF</code></td><td><span class="chip" style="background:#D9D3F6"></span><code>#D9D3F6</code></td></tr>
+        <tr><td>بنفش روشن ۳</td><td><code>#E2DAFF</code></td><td><span class="chip" style="background:#F1EEFF"></span><code>#F1EEFF</code></td></tr>
+      </table></div>
+      <p style="margin-top:14px"><b>نیاز به تأیید:</b> اعداد (تعداد باشگاه‌ها، نرخ کردیت، قیمت‌ها و نام سطح‌ها) نمایشی هستند و باید با داده‌ی واقعی جایگزین شوند.</p>
+    </div>
+  </div>
+</main>
+
+<footer class="wrap">هر دو نسخه صفحه‌ی کامل و قابل کلیک هستند؛ روی پیش‌نمایش‌ها کلیک کنید تا در اندازه‌ی واقعی باز شوند.</footer>
+
+<div class="modal" id="modal"><div class="dev"><button class="x" id="x" aria-label="بستن"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#141414" stroke-width="2.4" stroke-linecap="round"/></svg></button><iframe id="mf" title="پیش‌نمایش موبایل"></iframe></div></div>
+
+<script>
+// scale live previews to their cards
+const fit = () => document.querySelectorAll('.pv').forEach(p => { p.querySelector('iframe').style.transform = `scale(${p.clientWidth/1440})`; });
+new ResizeObserver(fit).observe(document.body); fit();
+// mobile preview modal
+const m = document.getElementById('modal'), f = document.getElementById('mf');
+document.querySelectorAll('[data-m]').forEach(b => b.onclick = () => { f.src = b.dataset.m; m.classList.add('open'); });
+const close = () => { m.classList.remove('open'); f.src = 'about:blank'; };
+document.getElementById('x').onclick = close;
+m.onclick = e => { if (e.target === m) close(); };
+addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+</script>
+</div>
+</body>
+</html>

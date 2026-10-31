@@ -1,0 +1,1116 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CityRep — یک پاس، همه‌ی باشگاه‌های شهر</title>
+<meta name="description" content="کیف پولت را شارژ کن و هر روز در یک باشگاه متفاوت تمرین کن. بدون قرارداد، بدون تعهد.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@300..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F1EA; --paper-2:#ECE7DC; --card:#FFFDF8; --ink:#15140F; --ink-2:#45423A; --muted:#878276; --line:#DDD6C7;
+  --accent:#FF4D1A; --accent-2:#FFE3D6;
+  --l-fit:#FF4D1A; --l-yoga:#7A5CFA; --l-swim:#0E9BDB; --l-cross:#F2AE00; --l-pil:#E6407A; --l-mart:#15140F; --l-body:#1FA866;
+  --r:22px; --r-sm:14px;
+  --shadow:0 1px 0 rgba(21,20,15,.04),0 12px 32px -12px rgba(21,20,15,.18);
+  --display:'Lalezar','Vazirmatn',system-ui,sans-serif;
+  --body:'Vazirmatn',system-ui,Tahoma,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.8;font-size:16px;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.wrap{width:min(1200px,100% - 40px);margin-inline:auto}
+.num{font-feature-settings:"ss01";font-variant-numeric:tabular-nums}
+::selection{background:var(--accent);color:#fff}
+
+/* grain */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.35;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.07 0 0 0 0 0.05 0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:10px;height:52px;padding:0 24px;border-radius:999px;font-weight:700;font-size:15.5px;transition:transform .25s cubic-bezier(.2,.8,.2,1),background .2s,box-shadow .25s;white-space:nowrap}
+.btn-ink{background:var(--ink);color:var(--paper)}
+.btn-ink:hover{transform:translateY(-2px);box-shadow:0 14px 30px -12px rgba(21,20,15,.55)}
+.btn-accent{background:var(--accent);color:#fff}
+.btn-accent:hover{transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(255,77,26,.6)}
+.btn-ghost{border:1.5px solid var(--ink);}
+.btn-ghost:hover{background:var(--ink);color:var(--paper)}
+.btn .arr{transition:transform .25s}
+.btn:hover .arr{transform:translateX(-4px)}
+.chip{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;padding:6px 14px 6px 12px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:13.5px;font-weight:600;color:var(--ink-2)}
+.dot-live{width:8px;height:8px;border-radius:50%;background:#1FA866;box-shadow:0 0 0 0 rgba(31,168,102,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(31,168,102,0)}100%{box-shadow:0 0 0 0 rgba(31,168,102,0)}}
+
+/* ---------- header ---------- */
+header{position:sticky;top:0;z-index:50;transition:background .3s,box-shadow .3s,backdrop-filter .3s}
+header.scrolled{background:rgba(244,241,234,.82);backdrop-filter:blur(14px) saturate(1.4);box-shadow:0 1px 0 var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:76px;gap:24px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:26px;letter-spacing:.2px;direction:ltr}
+.logo svg{width:34px;height:34px}
+.nav-links{display:flex;gap:6px}
+.nav-links a{padding:8px 14px;border-radius:999px;font-weight:600;font-size:14.5px;color:var(--ink-2);transition:background .2s,color .2s}
+.nav-links a:hover{background:var(--paper-2);color:var(--ink)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.nav-cta .btn{height:44px;padding:0 18px;font-size:14.5px}
+.burger{display:none;width:44px;height:44px;border-radius:50%;border:1.5px solid var(--ink);align-items:center;justify-content:center}
+.sheet{position:fixed;inset:0;z-index:60;background:var(--paper);padding:24px 20px;display:flex;flex-direction:column;gap:6px;transform:translateY(-100%);transition:transform .45s cubic-bezier(.7,0,.2,1)}
+.sheet.open{transform:none}
+.sheet a{font-family:var(--display);font-size:38px;padding:6px 0;border-bottom:1px solid var(--line)}
+.sheet .close{align-self:flex-start;margin-bottom:20px}
+
+/* ---------- hero ---------- */
+.hero{padding:36px 0 40px;position:relative}
+.hero-grid{display:grid;grid-template-columns:1.02fr 1fr;gap:40px;align-items:center}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(50px,6.4vw,92px);line-height:1.08;letter-spacing:-.5px;margin:22px 0 22px}
+.hero h1 .hl{position:relative;display:inline-block;color:var(--accent)}
+.hero h1 .hl svg{position:absolute;inset-inline:-4%;bottom:-.12em;width:108%;height:.34em;overflow:visible}
+.hero h1 .hl path{stroke:var(--ink);stroke-width:5;fill:none;stroke-linecap:round;stroke-dasharray:420;stroke-dashoffset:420;animation:draw 1.2s .7s cubic-bezier(.6,0,.2,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.lead{font-size:clamp(16.5px,1.5vw,19px);color:var(--ink-2);max-width:31em}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.proof{display:flex;align-items:center;gap:14px;margin-top:34px;font-size:14px;color:var(--ink-2)}
+.avatars{display:flex}
+.avatars span{width:36px;height:36px;border-radius:50%;border:2.5px solid var(--paper);margin-inline-start:-10px;display:grid;place-items:center;font-weight:800;font-size:13px;color:#fff}
+.avatars span:first-child{margin:0}
+.proof b{color:var(--ink);font-weight:800}
+
+.map-wrap{position:relative;aspect-ratio:600/540}
+.map-card{position:absolute;inset:0;background:var(--card);border-radius:28px;box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--line)}
+.map-card svg{width:100%;height:100%}
+.map-head{position:absolute;top:16px;inset-inline:16px;display:flex;justify-content:space-between;align-items:center;z-index:2;pointer-events:none}
+.map-head .chip{pointer-events:auto}
+.legend{position:absolute;bottom:14px;inset-inline-end:14px;background:rgba(255,253,248,.92);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:grid;grid-template-columns:repeat(2,auto);gap:4px 14px;font-size:12px;font-weight:600;z-index:2}
+.legend i{display:inline-block;width:16px;height:4px;border-radius:4px;vertical-align:middle;margin-inline-end:6px}
+.legend button{display:flex;align-items:center;font-size:12px;font-weight:600;opacity:1;transition:opacity .2s}
+.legend button.off{opacity:.3}
+.st{cursor:pointer}
+.st circle{transition:r .2s}
+.st:hover circle.o{r:9}
+.line{transition:opacity .3s}
+.dim .line:not(.on),.dim .st:not(.on){opacity:.12}
+.tip{position:absolute;z-index:5;pointer-events:none;background:var(--ink);color:var(--paper);border-radius:12px;padding:8px 12px;font-size:12.5px;line-height:1.6;white-space:nowrap;transform:translate(50%,-115%);opacity:0;transition:opacity .15s}
+.tip b{font-size:14px;display:block}
+.tip .cap{display:flex;gap:6px;align-items:center}
+.tip .bar{width:60px;height:5px;border-radius:5px;background:rgba(255,255,255,.18);overflow:hidden}
+.tip .bar i{display:block;height:100%;background:#7BE3A8}
+
+.pass{position:absolute;width:min(300px,58%);aspect-ratio:1.586;inset-inline-end:-30px;bottom:-34px;z-index:4;border-radius:20px;padding:18px 20px;color:#fff;
+  background:radial-gradient(120% 140% at 0% 0%,#FF7A4F 0%,var(--accent) 38%,#C92B00 100%);box-shadow:0 30px 60px -20px rgba(201,43,0,.55),inset 0 1px 0 rgba(255,255,255,.35);
+  transform-style:preserve-3d;transform:perspective(900px) rotateX(var(--rx,8deg)) rotateY(var(--ry,-14deg)) rotateZ(-4deg);transition:transform .2s ease-out;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.pass::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.35) 45%,transparent 60%);transform:translateX(var(--sh,-30%));transition:transform .2s;pointer-events:none}
+.pass .top{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:13px;letter-spacing:.5px}
+.pass .top span:last-child{background:rgba(255,255,255,.2);border-radius:999px;padding:2px 10px;font-size:11.5px}
+.pass .bal{font-size:12px;opacity:.85}
+.pass .bal b{display:block;font-family:var(--display);font-size:34px;line-height:1.1;font-weight:400;opacity:1}
+.pass .bot{display:flex;justify-content:space-between;align-items:end;font-size:11px;opacity:.9;direction:ltr;letter-spacing:2px}
+.pass .rings{position:absolute;inset-inline-start:-40px;top:-40px;width:180px;height:180px;opacity:.18}
+
+.toast{position:absolute;top:84px;inset-inline-start:-24px;z-index:4;display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 14px 10px 16px;box-shadow:var(--shadow);font-size:13px;line-height:1.5;transform:translateY(10px);opacity:0;transition:all .5s cubic-bezier(.2,.8,.2,1)}
+.toast.show{opacity:1;transform:none}
+.toast .ic{width:34px;height:34px;border-radius:10px;background:#E4F6EC;display:grid;place-items:center;flex:none}
+.toast b{display:block;font-size:13.5px}
+.toast small{color:var(--muted)}
+.toast .minus{font-weight:800;color:var(--accent);margin-inline-start:6px;direction:ltr}
+
+/* ---------- ticker ---------- */
+.ticker{border-block:1.5px solid var(--ink);background:var(--ink);color:var(--paper);overflow:hidden;margin-top:70px}
+.ticker .track{display:flex;width:max-content;animation:tick 38s linear infinite}
+.ticker span{font-family:var(--display);font-size:30px;padding:12px 26px;display:flex;align-items:center;gap:26px;white-space:nowrap}
+.ticker span i{width:14px;height:14px;border-radius:50%;border:3px solid currentColor;display:block}
+@keyframes tick{to{transform:translateX(50%)}}
+
+/* ---------- sections ---------- */
+section{padding:110px 0;position:relative}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:13px;letter-spacing:.3px;color:var(--accent);text-transform:uppercase}
+.eyebrow::before{content:"";width:22px;height:2px;background:currentColor}
+h2{font-family:var(--display);font-weight:400;font-size:clamp(38px,5vw,64px);line-height:1.12;margin:12px 0 16px;letter-spacing:-.3px}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:48px;flex-wrap:wrap}
+.sec-head p{max-width:30em;color:var(--ink-2)}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+.hero .rv{opacity:1;transform:none;animation:rise 1s cubic-bezier(.2,.8,.2,1) both}
+.hero .rv.d1{animation-delay:.08s}.hero .rv.d2{animation-delay:.16s}.hero .rv.d3{animation-delay:.24s}
+@keyframes rise{from{opacity:0;transform:translateY(28px)}}
+.rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}
+
+/* ---------- board ---------- */
+.board{background:var(--ink);color:var(--paper);border-radius:28px;padding:26px;box-shadow:0 40px 80px -40px rgba(21,20,15,.6);position:relative;overflow:hidden}
+.board::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 4px);pointer-events:none}
+.board-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.board-top .clock{font-family:var(--display);font-size:30px;color:#FFB800;direction:ltr}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filters button{border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600;color:rgba(244,241,234,.75);transition:all .2s;display:flex;align-items:center;gap:7px}
+.filters button i{width:8px;height:8px;border-radius:50%}
+.filters button.act{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.rows{display:grid;gap:6px}
+.row{display:grid;grid-template-columns:70px 1.6fr 1fr 1fr 1.3fr 90px;gap:14px;align-items:center;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.04);font-size:14.5px;transition:background .2s}
+.row:hover{background:rgba(255,255,255,.08)}
+.row.head{background:none;font-size:12px;color:rgba(244,241,234,.5);font-weight:700;padding-block:4px}
+.row .t{font-family:var(--display);font-size:20px;color:#FFB800}
+.row .g b{display:block;font-weight:700}
+.row .g small{color:rgba(244,241,234,.5);font-size:12px}
+.row .sp{display:flex;align-items:center;gap:8px}
+.row .sp i{width:10px;height:10px;border-radius:50%}
+.capbar{display:flex;align-items:center;gap:10px}
+.cells{display:flex;gap:3px}
+.cells i{width:9px;height:16px;border-radius:2px;background:rgba(255,255,255,.12);transition:background .4s}
+.cells i.on{background:#7BE3A8}
+.cells.low i.on{background:#FFB800}
+.cells.out i.on{background:#FF6B4A}
+.capbar .capt{font-size:12.5px;color:rgba(244,241,234,.75);min-width:52px}
+.flap{display:inline-flex;gap:3px;direction:ltr}
+.flap span{display:inline-grid;place-items:center;width:24px;height:32px;border-radius:5px;background:#26241D;font-family:var(--display);font-size:20px;color:var(--paper);position:relative;overflow:hidden}
+.flap span::after{content:"";position:absolute;inset-inline:0;top:50%;height:1px;background:rgba(0,0,0,.6)}
+.flap span.flip{animation:flip .45s}
+@keyframes flip{0%{transform:rotateX(0)}50%{transform:rotateX(90deg);filter:brightness(.6)}100%{transform:rotateX(0)}}
+.board-foot{display:flex;justify-content:space-between;margin-top:16px;font-size:12.5px;color:rgba(244,241,234,.5);gap:16px;flex-wrap:wrap}
+
+/* ---------- how ---------- */
+.how{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+.steps{display:grid;gap:0}
+.step{padding:44px 0 44px;border-top:1.5px solid var(--line);opacity:.35;transition:opacity .4s;min-height:42vh;display:flex;flex-direction:column;justify-content:center}
+.step.act{opacity:1}
+.step .n{font-family:var(--display);font-size:22px;color:var(--accent);display:flex;align-items:center;gap:12px}
+.step .n::after{content:"";height:2px;flex:1;max-width:60px;background:currentColor}
+.step h3{font-family:var(--display);font-weight:400;font-size:clamp(30px,3.2vw,42px);line-height:1.2;margin:10px 0}
+.step p{color:var(--ink-2);max-width:26em}
+.phone-col{position:sticky;top:110px;display:grid;place-items:center;height:calc(100vh - 140px);max-height:760px}
+.phone{width:min(320px,80vw);aspect-ratio:9/19;background:var(--ink);border-radius:46px;padding:11px;box-shadow:0 50px 100px -40px rgba(21,20,15,.55),inset 0 0 0 2px #3a382f;position:relative}
+.phone::before{content:"";position:absolute;top:20px;left:50%;translate:-50% 0;width:90px;height:26px;border-radius:20px;background:#000;z-index:5}
+.screen{position:absolute;inset:11px;border-radius:36px;background:var(--paper);overflow:hidden;opacity:0;transform:scale(.97);transition:opacity .5s,transform .5s}
+.screen.act{opacity:1;transform:none}
+.sb{display:flex;justify-content:space-between;padding:16px 26px 0;font-size:12px;font-weight:800;direction:ltr}
+.sc{padding:34px 18px 18px;display:flex;flex-direction:column;gap:12px;height:100%}
+.sc h4{font-family:var(--display);font-weight:400;font-size:26px;line-height:1.2}
+.sc .muted{color:var(--muted);font-size:12.5px}
+.otp{display:flex;gap:8px;direction:ltr;justify-content:center;margin:8px 0}
+.otp span{width:44px;height:54px;border-radius:12px;background:var(--card);border:1.5px solid var(--line);display:grid;place-items:center;font-family:var(--display);font-size:26px}
+.otp span.f{border-color:var(--ink)}
+.otp span.c{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-2)}
+.field{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:10px 14px;font-size:13px}
+.field small{display:block;color:var(--muted);font-size:11px}
+.field b{font-size:17px;direction:ltr;display:block;text-align:right;letter-spacing:1px}
+.pbtn{margin-top:auto;height:50px;border-radius:16px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-weight:800;font-size:14px}
+.pbtn.o{background:var(--accent)}
+.wcard{border-radius:20px;padding:16px;color:#fff;background:radial-gradient(120% 140% at 0% 0%,#FF7A4F 0%,var(--accent) 45%,#C92B00 100%)}
+.wcard small{opacity:.8;font-size:11.5px}
+.wcard b{display:block;font-family:var(--display);font-size:36px;font-weight:400;line-height:1.2}
+.amts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.amts span{border:1.5px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center;font-size:12px;font-weight:700;background:var(--card)}
+.amts span.s{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.gl{display:grid;gap:8px}
+.gi{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px}
+.gi .th{width:44px;height:44px;border-radius:10px;flex:none;display:grid;place-items:center}
+.gi .th svg{width:22px;height:22px}
+.gi .tx{flex:1;font-size:12px;line-height:1.5}
+.gi .tx b{display:block;font-size:13px}
+.gi .cr{font-weight:800;font-size:12px;background:var(--paper-2);border-radius:8px;padding:2px 8px}
+.minimap{height:150px;border-radius:16px;overflow:hidden;background:var(--paper-2);position:relative}
+.qr{width:170px;height:170px;margin:6px auto;background:var(--card);border-radius:20px;padding:14px;border:1px solid var(--line);position:relative}
+.qr .scan{position:absolute;inset-inline:10px;height:3px;background:var(--accent);border-radius:3px;box-shadow:0 0 12px var(--accent);animation:scan 2.2s ease-in-out infinite}
+@keyframes scan{0%,100%{top:14px}50%{top:150px}}
+.okbox{display:flex;gap:10px;align-items:center;background:#E4F6EC;border-radius:14px;padding:10px 12px;font-size:12.5px}
+.okbox b{display:block}
+
+/* ---------- tiers ---------- */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.ticket{position:relative;background:var(--card);border-radius:24px;padding:28px 26px;border:1px solid var(--line);transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s;display:flex;flex-direction:column}
+.ticket:hover{transform:translateY(-6px) rotate(-.4deg);box-shadow:var(--shadow)}
+.ticket .perf{position:relative;margin:22px -26px;border-top:2px dashed var(--line)}
+.ticket .perf::before,.ticket .perf::after{content:"";position:absolute;top:-13px;width:24px;height:24px;border-radius:50%;background:var(--paper);border:1px solid var(--line)}
+.ticket .perf::before{right:-13px;clip-path:inset(0 50% 0 0)}
+.ticket .perf::after{left:-13px;clip-path:inset(0 0 0 50%)}
+.ticket .tn{display:flex;justify-content:space-between;align-items:center}
+.ticket .tn span{font-weight:800;font-size:13px;padding:4px 12px;border-radius:999px}
+.ticket h3{font-family:var(--display);font-weight:400;font-size:40px;line-height:1.2;margin-top:14px}
+.ticket .price{display:flex;align-items:baseline;gap:8px;margin-top:6px}
+.ticket .price b{font-family:var(--display);font-weight:400;font-size:64px;line-height:1}
+.ticket .price small{color:var(--muted);font-size:14px}
+.ticket ul{list-style:none;display:grid;gap:10px;font-size:14.5px;color:var(--ink-2)}
+.ticket li{display:flex;gap:10px;align-items:flex-start}
+.ticket li svg{flex:none;margin-top:5px}
+.ticket .foot{margin-top:auto;padding-top:22px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}
+.ticket .foot .bars{display:flex;gap:3px;direction:ltr}
+.ticket .foot .bars i{width:3px;height:22px;background:var(--ink);border-radius:1px}
+.ticket.feat{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.ticket.feat ul,.ticket.feat .foot{color:rgba(244,241,234,.75)}
+.ticket.feat .perf{border-color:rgba(255,255,255,.18)}
+.ticket.feat .foot .bars i{background:var(--paper)}
+
+/* ---------- calc ---------- */
+.calc{display:grid;grid-template-columns:1.1fr 1fr;gap:0;background:var(--card);border:1px solid var(--line);border-radius:28px;overflow:hidden;margin-top:28px}
+.calc .in{padding:34px}
+.calc .out{padding:34px;background:var(--paper-2);display:flex;flex-direction:column;gap:18px}
+.calc label{font-weight:700;font-size:15px;display:flex;justify-content:space-between}
+.calc label output{font-family:var(--display);font-size:26px;font-weight:400;color:var(--accent)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:8px;background:linear-gradient(to left,var(--ink) var(--p,40%),var(--line) var(--p,40%));margin:16px 0 30px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:var(--accent);border:4px solid var(--card);box-shadow:0 2px 10px rgba(0,0,0,.25);cursor:grab}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--accent);border:4px solid var(--card);box-shadow:0 2px 10px rgba(0,0,0,.25);cursor:grab}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);background:var(--paper-2);border-radius:16px;padding:5px;margin-top:12px}
+.seg button{padding:12px 6px;border-radius:12px;font-weight:700;font-size:14px;transition:background .25s,color .25s}
+.seg button small{display:block;font-weight:500;font-size:11.5px;color:var(--muted)}
+.seg button.act{background:var(--ink);color:var(--paper)}
+.seg button.act small{color:rgba(244,241,234,.6)}
+.big{font-family:var(--display);font-size:clamp(44px,5vw,64px);line-height:1;font-weight:400}
+.big small{font-family:var(--body);font-size:15px;color:var(--muted);font-weight:500}
+.cmp{display:grid;gap:12px}
+.cmp .bar{height:44px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:13px;font-weight:700;transition:width .6s cubic-bezier(.2,.8,.2,1);min-width:fit-content;white-space:nowrap;gap:12px}
+.cmp .a{background:var(--accent);color:#fff}
+.cmp .b{background:var(--card);border:1.5px solid var(--line)}
+.verdict{font-size:14.5px;color:var(--ink-2);border-top:1.5px dashed var(--line);padding-top:16px}
+.verdict b{color:var(--ink)}
+.note{font-size:12px;color:var(--muted)}
+
+/* ---------- audiences ---------- */
+.tabs{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px;gap:4px;position:relative}
+.tabs button{position:relative;z-index:1;padding:10px 22px;border-radius:999px;font-weight:700;font-size:15px;transition:color .3s}
+.tabs button.act{color:var(--paper)}
+.tabs .pill{position:absolute;top:5px;bottom:5px;border-radius:999px;background:var(--ink);transition:all .4s cubic-bezier(.2,.8,.2,1)}
+.panes{margin-top:34px;position:relative}
+.pane{display:none;grid-template-columns:1fr 1fr;gap:40px;align-items:center;animation:fade .5s}
+.pane.act{display:grid}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}}
+.pane h3{font-family:var(--display);font-weight:400;font-size:clamp(32px,3.6vw,48px);line-height:1.2;margin-bottom:14px}
+.ben{list-style:none;display:grid;gap:14px;margin-top:20px}
+.ben li{display:flex;gap:14px;align-items:center;font-weight:600;font-size:16px}
+.ben li span{width:40px;height:40px;border-radius:12px;background:var(--accent-2);color:var(--accent);display:grid;place-items:center;flex:none}
+.vis{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:26px;min-height:340px;box-shadow:var(--shadow)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:16px}
+.week div{border-radius:14px;padding:10px 4px;text-align:center;font-size:11.5px;font-weight:700;min-height:120px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.week div em{font-style:normal;color:var(--muted);font-weight:600}
+.week div i{width:30px;height:30px;border-radius:10px;display:grid;place-items:center}
+.week div i svg{width:18px;height:18px}
+.chart{display:flex;align-items:end;gap:6px;height:170px;margin-top:20px;border-bottom:1.5px solid var(--line);padding-bottom:4px}
+.chart div{flex:1;border-radius:6px 6px 2px 2px;position:relative;background:var(--paper-2)}
+.chart div i{position:absolute;inset-inline:0;bottom:0;border-radius:6px 6px 2px 2px;background:var(--accent);transition:height 1s cubic-bezier(.2,.8,.2,1)}
+.chart-l{display:flex;gap:6px;margin-top:6px;font-size:11px;color:var(--muted);text-align:center}
+.chart-l span{flex:1}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kpis div{background:var(--paper);border-radius:14px;padding:12px}
+.kpis small{color:var(--muted);font-size:12px;display:block}
+.kpis b{font-family:var(--display);font-weight:400;font-size:28px}
+.clients{display:grid;gap:10px;margin-top:16px}
+.clients div{display:flex;align-items:center;gap:12px;background:var(--paper);border-radius:14px;padding:10px 12px;font-size:13.5px}
+.clients div .av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800}
+.clients div .tx{flex:1;line-height:1.5}
+.clients div .tx small{display:block;color:var(--muted);font-size:12px}
+
+/* ---------- sports ---------- */
+.sports{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.sport{position:relative;border-radius:24px;padding:22px;min-height:220px;background:var(--card);border:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;transition:transform .35s cubic-bezier(.2,.8,.2,1),color .35s;isolation:isolate}
+.sport::before{content:"";position:absolute;inset:0;background:var(--c);clip-path:circle(0% at 15% 85%);transition:clip-path .6s cubic-bezier(.7,0,.2,1);z-index:-1}
+.sport:hover{transform:translateY(-4px);color:#fff}
+.sport:hover::before{clip-path:circle(150% at 15% 85%)}
+.sport .ico{width:62px;height:62px;border-radius:18px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 14%,transparent);color:var(--c);transition:all .35s}
+.sport:hover .ico{background:rgba(255,255,255,.2);color:#fff}
+.sport .ico svg{width:32px;height:32px}
+.sport h3{font-family:var(--display);font-weight:400;font-size:30px;line-height:1.2}
+.sport small{font-weight:600;opacity:.7;font-size:13px}
+.sport .ln{position:absolute;top:22px;inset-inline-end:22px;width:28px;height:28px;border-radius:50%;border:5px solid var(--c);background:var(--card);transition:all .35s}
+.sport:hover .ln{border-color:#fff;background:transparent}
+
+/* ---------- compare ---------- */
+.vs{display:grid;grid-template-columns:1.3fr 1fr 1fr;background:var(--card);border:1px solid var(--line);border-radius:28px;overflow:hidden}
+.vs > div{padding:18px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;font-size:15px}
+.vs > div:nth-last-child(-n+3){border-bottom:0}
+.vs .h{font-weight:800;font-size:14px;color:var(--muted);background:var(--paper)}
+.vs .h.us{background:var(--ink);color:var(--paper);font-family:var(--display);font-size:24px;font-weight:400;direction:ltr;justify-content:flex-end}
+.vs .us{background:color-mix(in srgb,var(--accent) 6%,var(--card));font-weight:700}
+.vs .k{font-weight:700}
+.vs .no{color:var(--muted)}
+
+/* ---------- faq ---------- */
+.faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:60px}
+details{border-bottom:1.5px solid var(--line)}
+summary{list-style:none;cursor:pointer;padding:24px 0;display:flex;justify-content:space-between;align-items:center;gap:20px;font-weight:700;font-size:18px}
+summary::-webkit-details-marker{display:none}
+summary .pm{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;flex:none;transition:transform .35s,background .2s}
+details[open] summary .pm{transform:rotate(45deg);background:var(--ink);color:var(--paper)}
+details .ans{padding:0 0 24px;color:var(--ink-2);max-width:40em}
+
+/* ---------- cta ---------- */
+.cta{background:var(--accent);color:#fff;border-radius:36px;padding:80px 60px;position:relative;overflow:hidden;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
+.cta h2{font-size:clamp(44px,6vw,84px);line-height:1.05}
+.cta p{opacity:.9;font-size:18px;max-width:26em}
+.cta .btn-ink{background:var(--ink)}
+.cta svg.bg{position:absolute;inset-inline-start:-60px;bottom:-80px;width:520px;opacity:.22;pointer-events:none}
+.stores{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.store{display:flex;align-items:center;gap:10px;border:1.5px solid rgba(255,255,255,.55);border-radius:14px;padding:8px 16px;font-size:12px;line-height:1.3;transition:background .2s}
+.store:hover{background:rgba(255,255,255,.15)}
+.store b{display:block;font-size:15px}
+.cta-card{background:var(--paper);color:var(--ink);border-radius:24px;padding:26px;box-shadow:0 30px 60px -30px rgba(0,0,0,.45);transform:rotate(-2deg)}
+.cta-card .field{margin:14px 0}
+.cta-card .row2{display:flex;gap:10px}
+.cta-card input{width:100%;border:0;background:none;font:inherit;font-size:18px;font-weight:700;direction:ltr;text-align:right;outline:none;letter-spacing:1px}
+
+footer{padding:70px 0 40px}
+.foot{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:30px}
+.foot h5{font-size:13px;color:var(--muted);font-weight:800;margin-bottom:14px}
+.foot a{display:block;padding:4px 0;font-weight:600;font-size:14.5px}
+.foot a:hover{color:var(--accent)}
+.huge{font-family:var(--display);font-size:clamp(80px,20vw,300px);line-height:.8;letter-spacing:-4px;margin-top:60px;color:var(--ink);direction:ltr;text-align:center;opacity:.95;user-select:none}
+.huge span{color:var(--accent)}
+.copy{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:30px;padding-top:20px;border-top:1.5px solid var(--line);font-size:13px;color:var(--muted)}
+
+/* ---------- responsive ---------- */
+.step .mini{display:none;margin-top:18px}
+@media (max-width:1020px){
+  .nav-links{display:none}
+  .burger{display:inline-flex}
+  .nav-cta .btn-ghost{display:none}
+  .hero-grid,.how,.pane,.calc,.faq-grid,.cta{grid-template-columns:1fr}
+  .map-wrap{max-width:620px;width:100%;margin-inline:auto}
+  .tiers{grid-template-columns:1fr;max-width:520px;margin-inline:auto}
+  .sports{grid-template-columns:repeat(2,1fr)}
+  .phone-col{display:none}
+  .step{opacity:1;min-height:0;padding:30px 0}
+  .step .mini{display:block}
+  .row{grid-template-columns:56px 1.5fr 1fr 1.3fr 80px}
+  .row .rg{display:none}
+  .cta{padding:50px 30px}
+}
+@media (max-width:640px){
+  body{font-size:15px}
+  .wrap{width:calc(100% - 32px)}
+  section{padding:80px 0}
+  .nav{height:66px}
+  .nav-cta .btn-ink{height:40px;padding:0 14px;font-size:13.5px}
+  .hero{padding-top:20px}
+  .hero-ctas .btn{flex:1;justify-content:center}
+  .pass{inset-inline-end:-6px;bottom:-26px;width:62%;padding:12px 14px;border-radius:16px}
+  .pass .bal b{font-size:24px}
+  .toast{inset-inline-start:-4px;top:58px;font-size:11.5px;padding:8px 10px}
+  .toast b{font-size:12px}
+  .legend{display:none}
+  .ticker{margin-top:60px}
+  .ticker span{font-size:22px;padding:8px 18px}
+  .board{padding:16px;border-radius:22px;margin-inline:-6px}
+  .row{grid-template-columns:1.4fr 1fr 74px;gap:8px;padding:10px}
+  .row .t,.row .sp-c,.row .t-h{display:none}
+  .flap span{width:19px;height:26px;font-size:16px}
+  .cells i{width:6px;height:13px}
+  .capbar .capt{display:none}
+  .sports{gap:10px}
+  .sport{min-height:170px;padding:16px;border-radius:20px}
+  .sport h3{font-size:24px}
+  .sport .ico{width:50px;height:50px}
+  .vs{grid-template-columns:1fr 1fr 1fr;font-size:13px}
+  .vs > div{padding:12px;font-size:13px}
+  .vs .h.us{font-size:18px}
+  .tabs button{padding:9px 14px;font-size:14px}
+  .calc .in,.calc .out{padding:22px}
+  .week{gap:4px}
+  .week div{min-height:96px;font-size:10px}
+  .week div i{width:24px;height:24px}
+  .foot{grid-template-columns:1fr 1fr}
+  .foot > div:first-child{grid-column:1/-1}
+  .cta{padding:40px 22px;border-radius:28px}
+  summary{font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- svg sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M19 12H5m6-6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-fit" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 16h14"/><rect x="4" y="10" width="5" height="12" rx="1.5"/><rect x="23" y="10" width="5" height="12" rx="1.5"/><path d="M2 14v4M30 14v4"/></g></symbol>
+    <symbol id="i-yoga" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="6.5" r="2.8"/><path d="M16 10v8M6 13c4 2.5 6.5 3 10 3s6-.5 10-3M9 26c2-3 4.5-5 7-8 2.5 3 5 5 7 8M8 26h16"/></g></symbol>
+    <symbol id="i-swim" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="22" cy="9" r="2.8"/><path d="M5 17l7-5 4 3.5L21 13M3 22c2.2 0 2.2-1.5 4.4-1.5S9.6 22 11.8 22s2.2-1.5 4.4-1.5S18.4 22 20.6 22 22.8 20.5 25 20.5 27.2 22 29 22M3 27c2.2 0 2.2-1.5 4.4-1.5S9.6 27 11.8 27s2.2-1.5 4.4-1.5S18.4 27 20.6 27 22.8 25.5 25 25.5 27.2 27 29 27"/></g></symbol>
+    <symbol id="i-cross" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9c0-3 2.7-5 6-5s6 2 6 5"/><path d="M8 12h16l-1.5 13a3 3 0 01-3 2.6h-7a3 3 0 01-3-2.6z"/><circle cx="16" cy="19" r="3"/></g></symbol>
+    <symbol id="i-pil" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="11"/><path d="M5.5 13c6 2 15 2 21 0M5.5 19c6 2 15 2 21 0"/></g></symbol>
+    <symbol id="i-mart" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14V9a3 3 0 013-3h7a4 4 0 014 4v8a6 6 0 01-6 6h-3a5 5 0 01-5-5z"/><path d="M9 14h9M13 24v4h8v-4"/></g></symbol>
+    <symbol id="i-body" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20c0-5 3-9 7-10l2-4h4l-1 5c4 1 7 5 7 9"/><path d="M4 24c4-2 8-3 12-3s8 1 12 3"/></g></symbol>
+    <symbol id="i-func" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5.5" r="2.6"/><path d="M8 13l5-3 5 2 3 5 5 1M13 10l-2 8 5 3-2 8M11 18l-5 6"/></g></symbol>
+  </defs>
+</svg>
+
+<header id="hdr">
+  <div class="wrap nav">
+    <a href="#" class="logo" aria-label="CityRep">
+      <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="var(--ink)"/><path d="M8 26 L16 18 H24 L32 10" stroke="var(--accent)" stroke-width="4.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="18" r="3.2" fill="#fff"/><circle cx="24" cy="18" r="3.2" fill="#fff"/></svg>
+      CityRep
+    </a>
+    <nav class="nav-links">
+      <a href="#board">باشگاه‌های امروز</a>
+      <a href="#how">چطور کار می‌کند</a>
+      <a href="#tiers">سطح‌ها و هزینه</a>
+      <a href="#who">برای مربی‌ها و باشگاه‌ها</a>
+      <a href="#faq">سوالات</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#" class="btn btn-ghost">ورود</a>
+      <a href="#get" class="btn btn-ink">دریافت پاس</a>
+      <button class="burger" id="burger" aria-label="منو"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M3 7h18M3 17h18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+</header>
+<div class="sheet" id="sheet">
+  <button class="burger close" id="close" aria-label="بستن" style="display:inline-flex"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+  <a href="#board">باشگاه‌های امروز</a><a href="#how">چطور کار می‌کند</a><a href="#tiers">سطح‌ها و هزینه</a><a href="#who">مربی‌ها و باشگاه‌ها</a><a href="#faq">سوالات</a>
+  <a href="#get" class="btn btn-accent" style="font-family:var(--body);font-size:16px;margin-top:20px;justify-content:center;border:0">دریافت پاس رایگان</a>
+</div>
+
+<main>
+<!-- ================= HERO ================= -->
+<section class="hero" style="padding-bottom:0">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="chip rv"><i class="dot-live"></i><span><b class="num" id="liveCount">۲۴</b> باشگاه همین الان ظرفیت خالی دارند</span></span>
+      <h1 class="rv d1">یک پاس،<br>همه‌ی باشگاه‌های<br><span style="white-space:nowrap"><span class="hl">شهر<svg viewBox="0 0 200 30" preserveAspectRatio="none"><path d="M4 20 C 50 6, 120 4, 196 16"/></svg></span>.</span></h1>
+      <p class="lead rv d2">کیف پولت را یک بار شارژ کن و هر روز هر جا که دلت خواست تمرین کن؛ امروز بدنسازی در ونک، فردا یوگا در جردن. بدون قرارداد، بدون تعهد بلندمدت، بدون محدود شدن به یک مکان.</p>
+      <div class="hero-ctas rv d3">
+        <a href="#get" class="btn btn-accent">دریافت پاس رایگان <svg class="arr" width="18" height="18"><use href="#i-arrow"/></svg></a>
+        <a href="#how" class="btn btn-ghost">ببین چطور کار می‌کند</a>
+      </div>
+      <div class="proof rv d3">
+        <div class="avatars"><span style="background:#7A5CFA">س</span><span style="background:#0E9BDB">م</span><span style="background:#1FA866">ن</span><span style="background:var(--ink)">+</span></div>
+        <div><b class="num">۱۸٬۰۰۰+</b> ورزشکار در تهران<br>در <b class="num">۱۲۰</b> باشگاه همکار تمرین می‌کنند</div>
+      </div>
+    </div>
+
+    <div class="map-wrap rv d2" id="mapWrap">
+      <div class="map-card" id="mapCard">
+        <div class="map-head">
+          <span class="chip" style="font-size:12.5px"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 22s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/></svg>نقشه‌ی شبکه — تهران</span>
+        </div>
+        <svg viewBox="0 0 600 540" id="map" role="img" aria-label="نقشه‌ی خطوط ورزشی شهر">
+          <defs>
+            <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" fill="none" stroke="#EDE7DA" stroke-width="1"/></pattern>
+          </defs>
+          <rect width="600" height="540" fill="url(#grid)"/>
+          <!-- parks & blocks -->
+          <path d="M60 300 q40 -30 90 -10 q20 40 -20 60 q-60 10 -70 -50z" fill="#E3EEDC"/>
+          <path d="M420 420 q50 -20 110 0 q20 30 -10 60 q-70 20 -100 -60z" fill="#E3EEDC"/>
+          <path d="M470 90 q40 0 60 30 q-10 30 -50 30 q-30 -20 -10 -60z" fill="#E3EEDC"/>
+          <path d="M0 470 C 120 440, 200 520, 330 500 S 520 520, 600 500" stroke="#D8E8F3" stroke-width="16" fill="none" stroke-linecap="round"/>
+          <g font-family="Vazirmatn" font-size="11" font-weight="700" fill="#B3AC9C" letter-spacing=".5">
+            <text x="540" y="40" text-anchor="middle">تجریش</text>
+            <text x="70" y="98" text-anchor="middle">پونک</text>
+            <text x="300" y="20" text-anchor="middle">ونک</text>
+            <text x="560" y="300" text-anchor="middle">نارمک</text>
+            <text x="90" y="460" text-anchor="middle">صادقیه</text>
+          </g>
+          <g id="lines" fill="none" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"></g>
+          <g id="trains"></g>
+          <g id="stations"></g>
+        </svg>
+        <div class="legend" id="legend"></div>
+        <div class="tip" id="tip"></div>
+      </div>
+      <div class="toast" id="toast">
+        <div class="ic"><svg width="18" height="18" style="color:#1FA866"><use href="#i-check"/></svg></div>
+        <div><b id="toastT">ورود موفق — باشگاه آریا</b><small id="toastS">ونک · بدنسازی</small></div>
+        <span class="minus num" id="toastM">−۱۲</span>
+      </div>
+      <div class="pass" id="pass">
+        <svg class="rings" viewBox="0 0 100 100"><g fill="none" stroke="#fff" stroke-width="2"><circle cx="50" cy="50" r="20"/><circle cx="50" cy="50" r="32"/><circle cx="50" cy="50" r="44"/></g></svg>
+        <div class="top"><span style="direction:ltr">CityRep PASS</span><span>سطح پلاس</span></div>
+        <div class="bal">موجودی کیف پول<b class="num" id="passBal">۴۸۰ کردیت</b></div>
+        <div class="bot"><span>•••• 2048</span><span>TEHRAN</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticker" aria-hidden="true"><div class="track" id="ticker"></div></div>
+</section>
+
+<!-- ================= BOARD ================= -->
+<section id="board">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="rv"><span class="eyebrow">ظرفیت زنده</span><h2>امروز کجا تمرین کنی؟</h2></div>
+      <p class="rv d1">باشگاه‌ها ظرفیت خالی ساعت‌هایشان را اعلام می‌کنند و تو از بینشان انتخاب می‌کنی. مثل تابلوی حرکت قطار — فقط به جای سکو، سالن تمرین.</p>
+    </div>
+    <div class="board rv">
+      <div class="board-top">
+        <div class="filters" id="filters"></div>
+        <div class="clock num" id="clock">18:42</div>
+      </div>
+      <div class="rows" id="rows">
+        <div class="row head"><span class="t-h">ساعت</span><span>باشگاه</span><span class="sp-c">رشته</span><span class="rg">سطح</span><span>ظرفیت</span><span>کردیت</span></div>
+      </div>
+      <div class="board-foot"><span>به‌روزرسانی خودکار هر چند ثانیه · داده‌ها نمایشی است</span><span>مجموع <b class="num" id="totalSlots">—</b> جای خالی در شهر</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW ================= -->
+<section id="how" style="background:var(--paper-2)">
+  <div class="wrap">
+    <div class="rv"><span class="eyebrow">در چهار ایستگاه</span><h2>چطور کار می‌کند؟</h2></div>
+    <div class="how">
+      <div class="steps" id="steps">
+        <div class="step act" data-s="0">
+          <span class="n">۰۱</span>
+          <h3>حساب بساز، در کمتر از یک دقیقه</h3>
+          <p>فقط شماره موبایل و یک کد تأیید. نه فرم طولانی، نه مراجعه‌ی حضوری، نه قرارداد.</p>
+        </div>
+        <div class="step" data-s="1">
+          <span class="n">۰۲</span>
+          <h3>کیف پولت را شارژ کن</h3>
+          <p>هر مبلغی که خواستی؛ اعتبارت به کردیت تبدیل می‌شود و فقط به اندازه‌ای که تمرین می‌کنی خرج می‌شود. کردیت استفاده‌نشده هیچ‌وقت نمی‌سوزد.</p>
+        </div>
+        <div class="step" data-s="2">
+          <span class="n">۰۳</span>
+          <h3>باشگاه امروزت را انتخاب کن</h3>
+          <p>روی نقشه نزدیک‌ترین‌ها را ببین، بر اساس رشته و سطح فیلتر کن، و ظرفیت لحظه‌ای هر سالن را قبل از رفتن چک کن.</p>
+        </div>
+        <div class="step" data-s="3">
+          <span class="n">۰۴</span>
+          <h3>اسکن کن، تمرین کن، تکرار کن</h3>
+          <p>دم در QR را اسکن کن؛ کردیت همان جلسه کسر می‌شود و تمام. فردا؟ یک باشگاه دیگر، یک سبک دیگر.</p>
+        </div>
+      </div>
+      <div class="phone-col">
+        <div class="phone" id="phone">
+          <!-- s0 -->
+          <div class="screen act"><div class="sb"><span>9:41</span><span>●●● ▮</span></div><div class="sc">
+            <span class="muted" style="margin-top:18px">قدم ۱ از ۲</span>
+            <h4>کد ۴ رقمی را وارد کن</h4>
+            <span class="muted">به ۰۹۱۲ ••• ۴۸ ۲۱ ارسال شد</span>
+            <div class="otp num"><span class="f">۷</span><span class="f">۳</span><span class="c">۱</span><span></span></div>
+            <span class="muted" style="text-align:center">ارسال دوباره تا <b class="num">۰:۴۲</b></span>
+            <div class="field" style="margin-top:14px"><small>شماره موبایل</small><b class="num">۰۹۱۲ ۳۴۵ ۴۸۲۱</b></div>
+            <div class="pbtn" style="margin-bottom:22px">تأیید و ادامه</div>
+          </div></div>
+          <!-- s1 -->
+          <div class="screen"><div class="sb"><span>9:41</span><span>●●● ▮</span></div><div class="sc">
+            <h4 style="margin-top:14px">کیف پول</h4>
+            <div class="wcard"><small>موجودی فعلی</small><b class="num">۴۸۰ کردیت</b><small>≈ <span class="num">۴۰</span> جلسه در باشگاه‌های پایه</small></div>
+            <span class="muted" style="font-weight:700;color:var(--ink)">افزایش اعتبار</span>
+            <div class="amts num"><span>۲۰۰ کردیت</span><span class="s">۵۰۰ کردیت</span><span>۱۰۰۰ کردیت</span></div>
+            <div class="field"><small>مبلغ قابل پرداخت</small><b class="num">۶٬۰۰۰٬۰۰۰ تومان</b></div>
+            <span class="muted">+ <b class="num" style="color:var(--l-body)">۵۰ کردیت</b> هدیه برای شارژ بالای ۵۰۰</span>
+            <div class="pbtn o" style="margin-bottom:22px">پرداخت و شارژ</div>
+          </div></div>
+          <!-- s2 -->
+          <div class="screen"><div class="sb"><span>9:41</span><span>●●● ▮</span></div><div class="sc" style="gap:10px">
+            <h4 style="margin-top:14px">نزدیک تو</h4>
+            <div class="minimap"><svg viewBox="0 0 300 150" width="100%" height="100%"><rect width="300" height="150" fill="url(#grid)"/><path d="M0 90 H120 L170 40 H300" stroke="var(--l-fit)" stroke-width="6" fill="none"/><path d="M90 0 V60 L150 120 V150" stroke="var(--l-yoga)" stroke-width="6" fill="none"/><circle cx="150" cy="80" r="40" fill="var(--accent)" opacity=".08"/><circle cx="150" cy="80" r="8" fill="var(--accent)" stroke="#fff" stroke-width="3"/><g fill="#fff" stroke="var(--ink)" stroke-width="2.5"><circle cx="120" cy="90" r="5"/><circle cx="90" cy="60" r="5"/><circle cx="220" cy="40" r="5"/><circle cx="150" cy="120" r="5"/></g></svg></div>
+            <div class="gl">
+              <div class="gi"><div class="th" style="background:#FFE3D6;color:var(--l-fit)"><svg><use href="#i-fit"/></svg></div><div class="tx"><b>باشگاه آریا</b>۸۰۰ متر · <span style="color:#1FA866">۱۴ جای خالی</span></div><span class="cr num">۱۲</span></div>
+              <div class="gi"><div class="th" style="background:#ECE7FF;color:var(--l-yoga)"><svg><use href="#i-yoga"/></svg></div><div class="tx"><b>استودیو نیلوفر</b>۱٫۲ کیلومتر · <span style="color:#C98A00">۳ جای خالی</span></div><span class="cr num">۸</span></div>
+              <div class="gi"><div class="th" style="background:#DDF1FB;color:var(--l-swim)"><svg><use href="#i-swim"/></svg></div><div class="tx"><b>مجموعه آبی کوهسار</b>۲ کیلومتر · <span style="color:#1FA866">۲۲ جای خالی</span></div><span class="cr num">۲۰</span></div>
+            </div>
+          </div></div>
+          <!-- s3 -->
+          <div class="screen"><div class="sb"><span>9:41</span><span>●●● ▮</span></div><div class="sc" style="align-items:stretch">
+            <h4 style="margin-top:14px;text-align:center">QR ورودی را اسکن کن</h4>
+            <div class="qr"><svg viewBox="0 0 21 21" width="100%" height="100%" shape-rendering="crispEdges" id="qrsvg"></svg><span class="scan"></span></div>
+            <div class="okbox"><svg width="22" height="22" style="color:#1FA866;flex:none"><use href="#i-check"/></svg><div><b>خوش اومدی به باشگاه آریا!</b><span class="num">۱۲ کردیت کسر شد · موجودی ۴۶۸</span></div></div>
+            <div class="field"><small>جلسه‌ی بعدی پیشنهادی</small><b style="font-size:14px;letter-spacing:0;direction:rtl">پیلاتس · فردا ۱۸:۰۰ · جردن</b></div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TIERS ================= -->
+<section id="tiers">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="rv"><span class="eyebrow">سطح‌بندی شفاف</span><h2>هر باشگاه، یک سطح.<br>هر سطح، یک قیمت.</h2></div>
+      <p class="rv d1">باشگاه‌ها بر اساس امکانات و خدماتشان در سه سطح دسته‌بندی شده‌اند. هزینه‌ی هر جلسه از قبل مشخص است؛ نه هزینه‌ی پنهان، نه شگفتی دم پذیرش.</p>
+    </div>
+    <div class="tiers">
+      <div class="ticket rv">
+        <div class="tn"><span style="background:#E4F6EC;color:#14804B">سطح ۱</span><span class="num" style="color:var(--muted);font-weight:700">۶۴ باشگاه</span></div>
+        <h3>پایه</h3>
+        <div class="price"><b class="num">۸</b><small>کردیت برای هر جلسه</small></div>
+        <div class="perf"></div>
+        <ul>
+          <li><svg width="16" height="16" style="color:#1FA866"><use href="#i-check"/></svg>سالن‌های محله‌ای با تجهیزات استاندارد</li>
+          <li><svg width="16" height="16" style="color:#1FA866"><use href="#i-check"/></svg>بدنسازی، آمادگی جسمانی، ایروبیک</li>
+          <li><svg width="16" height="16" style="color:#1FA866"><use href="#i-check"/></svg>رختکن و کمد</li>
+        </ul>
+        <div class="foot"><span>مناسب تمرین روزمره</span><span class="bars"><i></i><i></i><i style="width:1px"></i><i></i><i style="width:1px"></i><i></i><i></i></span></div>
+      </div>
+      <div class="ticket feat rv d1">
+        <div class="tn"><span style="background:var(--accent);color:#fff">سطح ۲ · محبوب‌ترین</span><span class="num" style="opacity:.6;font-weight:700">۴۱ باشگاه</span></div>
+        <h3>پلاس</h3>
+        <div class="price"><b class="num">۱۲</b><small style="color:rgba(244,241,234,.6)">کردیت برای هر جلسه</small></div>
+        <div class="perf"></div>
+        <ul>
+          <li><svg width="16" height="16" style="color:var(--accent)"><use href="#i-check"/></svg>همه‌ی باشگاه‌های سطح پایه</li>
+          <li><svg width="16" height="16" style="color:var(--accent)"><use href="#i-check"/></svg>کلاس‌های گروهی: یوگا، پیلاتس، کراس‌فیت</li>
+          <li><svg width="16" height="16" style="color:var(--accent)"><use href="#i-check"/></svg>دوش، رختکن کامل و پارکینگ</li>
+        </ul>
+        <div class="foot"><span>برای تنوع‌طلب‌ها</span><span class="bars"><i></i><i style="width:1px"></i><i></i><i></i><i style="width:1px"></i><i></i><i style="width:1px"></i><i></i></span></div>
+      </div>
+      <div class="ticket rv d2">
+        <div class="tn"><span style="background:#FFF1C9;color:#8A6300">سطح ۳</span><span class="num" style="color:var(--muted);font-weight:700">۱۵ مجموعه</span></div>
+        <h3>پریمیوم</h3>
+        <div class="price"><b class="num">۲۰</b><small>کردیت برای هر جلسه</small></div>
+        <div class="perf"></div>
+        <ul>
+          <li><svg width="16" height="16" style="color:#1FA866"><use href="#i-check"/></svg>همه‌ی باشگاه‌های سطح پایه و پلاس</li>
+          <li><svg width="16" height="16" style="color:#1FA866"><use href="#i-check"/></svg>استخر، سونا و جکوزی</li>
+          <li><svg width="16" height="16" style="color:#1FA866"><use href="#i-check"/></svg>تجهیزات حرفه‌ای و فضای VIP</li>
+        </ul>
+        <div class="foot"><span>تجربه‌ی کامل</span><span class="bars"><i></i><i></i><i style="width:1px"></i><i></i><i style="width:1px"></i><i style="width:1px"></i><i></i></span></div>
+      </div>
+    </div>
+
+    <div class="calc rv" id="calc">
+      <div class="in">
+        <h3 style="font-family:var(--display);font-weight:400;font-size:34px;line-height:1.2;margin-bottom:6px">ماهی چقدر خرج می‌کنی؟</h3>
+        <p class="note" style="margin-bottom:26px">عادت تمرینی‌ات را تنظیم کن تا هزینه‌ی واقعی‌ات را ببینی.</p>
+        <label for="sess">چند جلسه در هفته؟ <output id="sessOut" class="num">۳</output></label>
+        <input type="range" id="sess" min="1" max="6" value="3">
+        <label>بیشتر در کدام سطح تمرین می‌کنی؟</label>
+        <div class="seg" id="tierSeg">
+          <button data-c="8" data-m="1500000">پایه<small>۸ کردیت</small></button>
+          <button data-c="12" data-m="2500000" class="act">پلاس<small>۱۲ کردیت</small></button>
+          <button data-c="20" data-m="4500000">پریمیوم<small>۲۰ کردیت</small></button>
+        </div>
+      </div>
+      <div class="out">
+        <div>
+          <span class="note" style="font-weight:700">هزینه‌ی ماهانه‌ی تو با CityRep</span>
+          <div class="big num" id="costOut">۱٬۸۷۲٬۰۰۰ <small>تومان</small></div>
+          <span class="note num" id="credOut">۱۵۶ کردیت در ماه</span>
+        </div>
+        <div class="cmp">
+          <div class="bar a" id="barA"><span>CityRep · <span id="gymsOut" class="num">۱۰۵</span> باشگاه</span><span class="num" id="barAv"></span></div>
+          <div class="bar b" id="barB"><span>عضویت ثابت · ۱ باشگاه</span><span class="num" id="barBv"></span></div>
+        </div>
+        <p class="verdict" id="verdict"></p>
+        <p class="note">ارقام نمایشی است؛ نرخ نهایی هر کردیت توسط تیم CityRep تعیین می‌شود.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHO ================= -->
+<section id="who" style="background:var(--paper-2)">
+  <div class="wrap">
+    <div class="sec-head" style="align-items:center">
+      <div class="rv"><span class="eyebrow">برای همه‌ی طرف‌ها</span><h2>یک شبکه، سه برنده.</h2></div>
+      <div class="tabs rv d1" id="tabs" role="tablist">
+        <span class="pill" id="pill"></span>
+        <button class="act" data-t="0" role="tab">ورزشکاران</button>
+        <button data-t="1" role="tab">مربیان</button>
+        <button data-t="2" role="tab">باشگاه‌ها</button>
+      </div>
+    </div>
+    <div class="panes">
+      <div class="pane act">
+        <div>
+          <h3>هر روز یک حال‌وهوای تازه</h3>
+          <p style="color:var(--ink-2)">بدنت تغییر می‌کند، سلیقه‌ات تغییر می‌کند؛ محل تمرینت نباید جلوی این تغییر را بگیرد.</p>
+          <ul class="ben">
+            <li><span><svg width="18" height="18"><use href="#i-check"/></svg></span>آزادی کامل در انتخاب سبک تمرین</li>
+            <li><span><svg width="18" height="18"><use href="#i-check"/></svg></span>دسترسی به ده‌ها باشگاه در کل شهر</li>
+            <li><span><svg width="18" height="18"><use href="#i-check"/></svg></span>بدون تعهد و قرارداد بلندمدت</li>
+            <li><span><svg width="18" height="18"><use href="#i-check"/></svg></span>یک حساب، بی‌نهایت گزینه</li>
+          </ul>
+        </div>
+        <div class="vis">
+          <div style="display:flex;justify-content:space-between;align-items:center"><b>هفته‌ی تمرینی سارا</b><span class="chip num" style="font-size:12px">۵۶ کردیت</span></div>
+          <div class="week" id="week"></div>
+        </div>
+      </div>
+      <div class="pane">
+        <div>
+          <h3>شاگردت را هر جا که هست ببین</h3>
+          <p style="color:var(--ink-2)">به جای اینکه شاگرد دنبال باشگاه تو بیاید، تو در نزدیک‌ترین باشگاه به او تمرین بده.</p>
+          <ul class="ben">
+            <li><span><svg width="18" height="18"><use href="#i-check"/></svg></span>دسترسی به باشگاه‌های متنوع برای شاگردان</li>
+            <li><span><svg width="18" height="18"><use href="#i-check"/></svg></span>جابجایی راحت بین باشگاه‌ها</li>
+            <li><span><svg width="18" height="18"><use href="#i-check"/></svg></span>ارتباط با شاگردان بیشتر در سطح شهر</li>
+          </ul>
+        </div>
+        <div class="vis">
+          <div style="display:flex;justify-content:space-between;align-items:center"><b>برنامه‌ی امروز مربی</b><span class="chip" style="font-size:12px">۳ جلسه · ۳ باشگاه</span></div>
+          <div class="clients">
+            <div><span class="av" style="background:var(--l-fit)">ع</span><span class="tx"><b>علی — قدرتی</b><small>باشگاه آریا، ونک</small></span><b class="num">۰۹:۰۰</b></div>
+            <div><span class="av" style="background:var(--l-pil)">م</span><span class="tx"><b>مریم — پیلاتس</b><small>استودیو فرم، جردن</small></span><b class="num">۱۲:۳۰</b></div>
+            <div><span class="av" style="background:var(--l-swim)">ر</span><span class="tx"><b>رضا — شنا</b><small>مجموعه آبی کوهسار</small></span><b class="num">۱۸:۰۰</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="pane">
+        <div>
+          <h3>ساعت‌های خالی‌ات را پر کن</h3>
+          <p style="color:var(--ink-2)">ساعت‌های کم‌تردد را به‌عنوان ظرفیت اعلام کن و از کاربرانی درآمد بگیر که هیچ‌وقت عضو ثابت نمی‌شدند.</p>
+          <ul class="ben">
+            <li><span><svg width="18" height="18"><use href="#i-check"/></svg></span>دسترسی به کاربران جدید</li>
+            <li><span><svg width="18" height="18"><use href="#i-check"/></svg></span>استفاده‌ی بهتر از ظرفیت موجود</li>
+            <li><span><svg width="18" height="18"><use href="#i-check"/></svg></span>همکاری ساده و ساختارمند</li>
+          </ul>
+        </div>
+        <div class="vis">
+          <div class="kpis"><div><small>ورود این ماه</small><b class="num">۱٬۲۴۰</b></div><div><small>کاربر جدید</small><b class="num">۳۱۸</b></div><div><small>پرشدن ظرفیت</small><b class="num">٪۷۸</b></div></div>
+          <div class="chart" id="chart"></div>
+          <div class="chart-l"><span>۶</span><span>۸</span><span>۱۰</span><span>۱۲</span><span>۱۴</span><span>۱۶</span><span>۱۸</span><span>۲۰</span><span>۲۲</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SPORTS ================= -->
+<section id="sports">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="rv"><span class="eyebrow">خطوط شبکه</span><h2>هر رشته، یک خط.</h2></div>
+      <p class="rv d1">از سالن بدنسازی محله تا استخر و استودیوی یوگا؛ هر چه می‌خواهی روی نقشه هست.</p>
+    </div>
+    <div class="sports" id="sportsGrid"></div>
+  </div>
+</section>
+
+<!-- ================= VS ================= -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="rv" style="margin-bottom:36px"><span class="eyebrow">مقایسه</span><h2>عضویت سنتی، یا آزادی؟</h2></div>
+    <div class="vs rv">
+      <div class="h"></div><div class="h">باشگاه سنتی</div><div class="h us">CityRep</div>
+      <div class="k">تعداد باشگاه‌ها</div><div class="no">یک مکان</div><div class="us num">۱۲۰+ مکان در کل شهر</div>
+      <div class="k">قرارداد</div><div class="no">ماهانه یا سالانه</div><div class="us">بدون قرارداد</div>
+      <div class="k">پرداخت</div><div class="no">کامل، حتی اگر نروی</div><div class="us">فقط به اندازه‌ی استفاده</div>
+      <div class="k">رشته‌ها</div><div class="no">معمولاً یک یا دو</div><div class="us num">۸ رشته</div>
+      <div class="k">ظرفیت لحظه‌ای</div><div class="no">نامعلوم</div><div class="us">قبل از رفتن می‌بینی</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section id="faq" style="padding-top:20px">
+  <div class="wrap faq-grid">
+    <div class="rv"><span class="eyebrow">سوالات پرتکرار</span><h2>هنوز سوال داری؟</h2><p style="color:var(--ink-2)">اگر جوابت اینجا نبود، تیم پشتیبانی هر روز از ۹ صبح تا ۹ شب پاسخگوست.</p></div>
+    <div class="rv d1">
+      <details open><summary>کردیت چیست و چطور خرج می‌شود؟<span class="pm">+</span></summary><p class="ans">کردیت واحد اعتبار داخل CityRep است. وقتی کیف پولت را شارژ می‌کنی مبلغ به کردیت تبدیل می‌شود و هر بار که QR ورودی باشگاه را اسکن می‌کنی، کردیت همان سطح از حسابت کسر می‌شود.</p></details>
+      <details><summary>اگر باشگاه پر باشد چه؟<span class="pm">+</span></summary><p class="ans">هر باشگاه ظرفیت خالی ساعت‌هایش را خودش اعلام می‌کند و تو قبل از رفتن آن را در اپ می‌بینی. می‌توانی جایت را رزرو کنی تا با خیال راحت بروی.</p></details>
+      <details><summary>کردیت‌هایم منقضی می‌شوند؟<span class="pm">+</span></summary><p class="ans">خیر. کردیت استفاده‌نشده در کیف پولت می‌ماند تا هر وقت خواستی از آن استفاده کنی.</p></details>
+      <details><summary>باشگاه‌ها چطور سطح‌بندی می‌شوند؟<span class="pm">+</span></summary><p class="ans">بر اساس امکانات، خدمات و کیفیت تجهیزات. تیم CityRep هر باشگاه را قبل از ورود به شبکه بازدید و سطح آن را تعیین می‌کند.</p></details>
+      <details><summary>من صاحب باشگاهم؛ چطور به شبکه بپیوندم؟<span class="pm">+</span></summary><p class="ans">فرم همکاری را پر کن تا تیم ما برای بازدید و قرارداد همکاری با تو تماس بگیرد. تسویه‌ی ورودی‌ها به‌صورت دوره‌ای انجام می‌شود.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section id="get" style="padding-top:20px">
+  <div class="wrap">
+    <div class="cta rv">
+      <svg class="bg" viewBox="0 0 400 400"><g fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round"><path d="M0 300 H140 L220 220 H400"/><path d="M120 0 V160 L200 240 V400"/></g><g fill="#FF4D1A" stroke="#fff" stroke-width="8"><circle cx="140" cy="300" r="16"/><circle cx="210" cy="230" r="20"/><circle cx="120" cy="140" r="16"/></g></svg>
+      <div style="position:relative">
+        <h2>اولین جلسه،<br>مهمان ما.</h2>
+        <p>با ثبت‌نام امروز، <b class="num">۲۰ کردیت</b> هدیه می‌گیری؛ کافی برای اولین تمرین در هر باشگاه پایه یا پلاس.</p>
+        <div class="stores">
+          <a href="#" class="store"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M5 3l14 9-14 9z"/></svg><span>دانلود نسخه‌ی<b>اندروید</b></span></a>
+          <a href="#" class="store"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 18h4"/></svg><span>دانلود نسخه‌ی<b>iOS</b></span></a>
+          <a href="#" class="store"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2c3 3 3 17 0 20M12 2c-3 3-3 17 0 20"/></svg><span>استفاده در<b>وب‌اپ</b></span></a>
+        </div>
+      </div>
+      <form class="cta-card" onsubmit="event.preventDefault();this.querySelector('.pbtn').textContent='کد برایت ارسال شد ✓'">
+        <b style="font-family:var(--display);font-weight:400;font-size:28px">دریافت پاس رایگان</b>
+        <div class="field"><small>شماره موبایل</small><input type="tel" inputmode="numeric" placeholder="09xx xxx xxxx" aria-label="شماره موبایل"></div>
+        <button class="pbtn o" style="width:100%">ارسال کد تأیید</button>
+        <p class="note" style="margin-top:10px">با ثبت‌نام، قوانین و حریم خصوصی CityRep را می‌پذیری.</p>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a href="#" class="logo" style="padding:0"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="var(--ink)"/><path d="M8 26 L16 18 H24 L32 10" stroke="var(--accent)" stroke-width="4.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="18" r="3.2" fill="#fff"/><circle cx="24" cy="18" r="3.2" fill="#fff"/></svg>CityRep</a>
+        <p style="color:var(--ink-2);margin-top:12px;max-width:22em;font-size:14.5px">پلتفرم دسترسی به فضاهای تمرینی در سطح شهر؛ طراحی‌شده برای شهرهایی که هیچ‌وقت ثابت نمی‌مانند.</p>
+      </div>
+      <div><h5>محصول</h5><a href="#board">باشگاه‌های امروز</a><a href="#tiers">سطح‌ها و هزینه</a><a href="#how">راهنمای استفاده</a></div>
+      <div><h5>همکاری</h5><a href="#who">برای باشگاه‌ها</a><a href="#who">برای مربیان</a><a href="#">فرصت‌های شغلی</a></div>
+      <div><h5>پشتیبانی</h5><a href="#faq">سوالات متداول</a><a href="#">قوانین و مقررات</a><a href="#">تماس با ما</a></div>
+    </div>
+    <div class="huge">City<span>Rep</span></div>
+    <div class="copy"><span>© <span class="num">۱۴۰۵</span> CityRep — تمامی حقوق محفوظ است.</span><span>ساخته‌شده برای تهران؛ آماده برای هر شهری.</span></div>
+  </div>
+</footer>
+
+<script>
+const fa = n => Number(n).toLocaleString('fa-IR');
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* header + menu */
+const hdr = $('#hdr');
+addEventListener('scroll', () => hdr.classList.toggle('scrolled', scrollY > 10), {passive:true});
+$('#burger').onclick = () => $('#sheet').classList.add('open');
+$('#close').onclick = () => $('#sheet').classList.remove('open');
+$$('#sheet a').forEach(a => a.addEventListener('click', () => $('#sheet').classList.remove('open')));
+
+/* reveal */
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), {threshold:.12, rootMargin:'0px 0px -40px 0px'});
+$$('.rv:not(.hero .rv)').forEach(el => io.observe(el));
+
+/* ---------- data ---------- */
+const SPORTS = {
+  fit:{n:'بدنسازی',c:'var(--l-fit)',hex:'#FF4D1A',i:'i-fit',g:46},
+  yoga:{n:'یوگا',c:'var(--l-yoga)',hex:'#7A5CFA',i:'i-yoga',g:18},
+  swim:{n:'شنا',c:'var(--l-swim)',hex:'#0E9BDB',i:'i-swim',g:12},
+  cross:{n:'کراس‌فیت',c:'var(--l-cross)',hex:'#F2AE00',i:'i-cross',g:21},
+  pil:{n:'پیلاتس',c:'var(--l-pil)',hex:'#E6407A',i:'i-pil',g:14},
+  mart:{n:'رزمی و بوکس',c:'var(--l-mart)',hex:'#15140F',i:'i-mart',g:16},
+  body:{n:'قدرتی',c:'var(--l-body)',hex:'#1FA866',i:'i-body',g:24},
+  func:{n:'آمادگی جسمانی',c:'#00A99D',hex:'#00A99D',i:'i-func',g:29},
+};
+
+/* ---------- map ---------- */
+const LINES = [
+  {k:'fit',  d:'M30 150 H230 L310 230 H570'},
+  {k:'yoga', d:'M150 50 V150 L230 230 V500'},
+  {k:'swim', d:'M30 410 H160 L230 340 H400 L480 260 V40'},
+  {k:'cross',d:'M570 470 H420 L340 390 V130 L400 70 H570'},
+];
+const STATIONS = [
+  {x:150,y:150,n:'باشگاه آریا',a:'ونک',l:['fit','yoga'],cap:14,max:30,cr:12,big:1},
+  {x:60,y:150,n:'سالن المپیک',a:'پونک',l:['fit'],cap:6,max:20,cr:8},
+  {x:340,y:230,n:'باکس ۳۴',a:'میرداماد',l:['fit','cross'],cap:3,max:16,cr:12,big:1},
+  {x:480,y:230,n:'آیرون هاوس',a:'پاسداران',l:['fit','swim'],cap:11,max:24,cr:12,big:1},
+  {x:560,y:230,n:'فیت‌لند',a:'نارمک',l:['fit'],cap:17,max:25,cr:8},
+  {x:150,y:85,n:'استودیو نیلوفر',a:'جردن',l:['yoga'],cap:3,max:12,cr:8},
+  {x:230,y:340,n:'مجموعه آبی کوهسار',a:'سعادت‌آباد',l:['yoga','swim'],cap:22,max:40,cr:20,big:1},
+  {x:230,y:450,n:'یوگا هوم',a:'یوسف‌آباد',l:['yoga'],cap:8,max:14,cr:8},
+  {x:60,y:410,n:'استخر صادقیه',a:'صادقیه',l:['swim'],cap:19,max:35,cr:20},
+  {x:340,y:340,n:'کراس پوینت',a:'ونک',l:['swim','cross'],cap:0,max:18,cr:12,big:1},
+  {x:480,y:70,n:'باشگاه کوهستان',a:'تجریش',l:['swim','cross'],cap:9,max:20,cr:20,big:1},
+  {x:480,y:150,n:'آکوا پارک',a:'نیاوران',l:['swim'],cap:25,max:50,cr:20},
+  {x:540,y:470,n:'وارزون',a:'تهرانپارس',l:['cross'],cap:5,max:14,cr:12},
+  {x:340,y:150,n:'باکس شمال',a:'ظفر',l:['cross'],cap:7,max:16,cr:12},
+];
+(function buildMap(){
+  const svg = $('#map'), gL = $('#lines'), gS = $('#stations'), gT = $('#trains'), NS='http://www.w3.org/2000/svg';
+  LINES.forEach((L,i) => {
+    const p = document.createElementNS(NS,'path');
+    p.setAttribute('d',L.d); p.setAttribute('stroke',SPORTS[L.k].hex); p.setAttribute('class','line'); p.dataset.k=L.k; p.id='ln'+i;
+    gL.appendChild(p);
+    const len = p.getTotalLength();
+    p.style.strokeDasharray = len; p.style.strokeDashoffset = reduce ? 0 : len;
+    p.animate([{strokeDashoffset:len},{strokeDashoffset:0}],{duration:reduce?1:1600,delay:300+i*220,easing:'cubic-bezier(.6,0,.2,1)',fill:'forwards'});
+    if (!reduce) for (let t=0;t<2;t++){
+      const c = document.createElementNS(NS,'circle');
+      c.setAttribute('r',5); c.setAttribute('fill','#fff'); c.setAttribute('stroke',SPORTS[L.k].hex); c.setAttribute('stroke-width',3); c.setAttribute('class','line'); c.dataset.k=L.k;
+      c.innerHTML = `<animateMotion dur="${9+i*1.7}s" begin="${2+t*4.5+i}s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="linear"><mpath href="#ln${i}"/></animateMotion>`;
+      gT.appendChild(c);
+    }
+  });
+  STATIONS.forEach((s,i) => {
+    const g = document.createElementNS(NS,'g');
+    g.setAttribute('class','st'); g.dataset.l = s.l.join(' ');
+    g.innerHTML = s.big
+      ? `<circle class="o" cx="${s.x}" cy="${s.y}" r="11" fill="#fff" stroke="#15140F" stroke-width="4"/>`
+      : `<circle class="o" cx="${s.x}" cy="${s.y}" r="7" fill="#fff" stroke="#15140F" stroke-width="3.5"/>`;
+    g.style.opacity = 0;
+    g.animate([{opacity:0,transform:'scale(.4)'},{opacity:1,transform:'scale(1)'}],{duration:reduce?1:400,delay:reduce?0:1200+i*70,fill:'forwards',easing:'cubic-bezier(.2,1.6,.4,1)'});
+    g.style.transformOrigin = `${s.x}px ${s.y}px`;
+    g.addEventListener('mouseenter', () => showTip(s));
+    g.addEventListener('mouseleave', () => tip.style.opacity = 0);
+    g.addEventListener('click', () => showTip(s));
+    gS.appendChild(g);
+  });
+  const tip = $('#tip');
+  function showTip(s){
+    const r = svg.getBoundingClientRect(), k = r.width/600, pct = s.max ? Math.round(s.cap/s.max*100) : 0;
+    tip.innerHTML = `<b>${s.n}</b>${s.a} · ${s.l.map(x=>SPORTS[x].n).join('، ')}<div class="cap"><span class="bar"><i style="width:${pct}%;background:${s.cap===0?'#FF6B4A':s.cap<5?'#FFB800':'#7BE3A8'}"></i></span>${s.cap? fa(s.cap)+' جای خالی':'تکمیل'} · ${fa(s.cr)} کردیت</div>`;
+    tip.style.right = 'auto';
+    tip.style.left = (s.x*k - tip.offsetWidth/2 + (s.x>420? -40 : s.x<120 ? 40 : 0)) + 'px';
+    tip.style.top = (s.y*k - 14) + 'px';
+    tip.style.transform = 'translate(0,-100%)';
+    tip.style.opacity = 1;
+  }
+  // legend toggles
+  const lg = $('#legend'); let active = null;
+  LINES.forEach(L => {
+    const b = document.createElement('button');
+    b.innerHTML = `<i style="background:${SPORTS[L.k].hex}"></i>${SPORTS[L.k].n}`;
+    b.onclick = () => {
+      active = active===L.k ? null : L.k;
+      svg.classList.toggle('dim', !!active);
+      $$('#map .line, #map .st').forEach(el => el.classList.toggle('on', !!active && (el.dataset.k===active || (el.dataset.l||'').split(' ').includes(active))));
+      $$('#legend button').forEach(x => x.classList.toggle('off', !!active && x!==b));
+    };
+    lg.appendChild(b);
+  });
+})();
+
+/* pass tilt */
+(function(){
+  const wrap = $('#mapWrap'), pass = $('#pass');
+  if (reduce || matchMedia('(hover:none)').matches) return;
+  wrap.addEventListener('mousemove', e => {
+    const r = wrap.getBoundingClientRect(), x = (e.clientX-r.left)/r.width-.5, y = (e.clientY-r.top)/r.height-.5;
+    pass.style.setProperty('--ry', (-14 + x*18)+'deg'); pass.style.setProperty('--rx', (8 - y*14)+'deg'); pass.style.setProperty('--sh', (x*120)+'%');
+  });
+  wrap.addEventListener('mouseleave', () => { pass.style.removeProperty('--ry'); pass.style.removeProperty('--rx'); pass.style.removeProperty('--sh'); });
+})();
+
+/* check-in toasts */
+(function(){
+  let bal = 480, i = 0;
+  const picks = STATIONS.filter(s => s.cap>0);
+  const toast = $('#toast');
+  function next(){
+    const s = picks[i++ % picks.length];
+    $('#toastT').textContent = 'ورود موفق — ' + s.n;
+    $('#toastS').textContent = s.a + ' · ' + SPORTS[s.l[0]].n;
+    $('#toastM').textContent = '−' + fa(s.cr);
+    toast.classList.add('show');
+    setTimeout(() => { bal -= s.cr; if (bal < 100) bal = 480; $('#passBal').textContent = fa(bal) + ' کردیت'; }, 600);
+    setTimeout(() => toast.classList.remove('show'), 3200);
+  }
+  setTimeout(() => { next(); setInterval(next, 4800); }, 2600);
+})();
+
+/* ticker */
+(function(){
+  const items = Object.values(SPORTS).map(s => `<span><i style="color:${s.hex}"></i>${s.n}</span>`).join('');
+  $('#ticker').innerHTML = items + items + items + items;
+})();
+
+/* ---------- departure board ---------- */
+(function(){
+  const GYMS = [
+    {t:'18:30',n:'باشگاه آریا',a:'ونک',k:'fit',tier:'پلاس',cap:14,max:20,cr:12},
+    {t:'18:45',n:'استودیو نیلوفر',a:'جردن',k:'yoga',tier:'پایه',cap:3,max:12,cr:8},
+    {t:'19:00',n:'مجموعه آبی کوهسار',a:'سعادت‌آباد',k:'swim',tier:'پریمیوم',cap:22,max:40,cr:20},
+    {t:'19:00',n:'باکس ۳۴',a:'میرداماد',k:'cross',tier:'پلاس',cap:2,max:16,cr:12},
+    {t:'19:15',n:'استودیو فرم',a:'جردن',k:'pil',tier:'پلاس',cap:6,max:10,cr:12},
+    {t:'19:30',n:'رینگ طلایی',a:'شریعتی',k:'mart',tier:'پایه',cap:9,max:18,cr:8},
+    {t:'20:00',n:'آیرون هاوس',a:'پاسداران',k:'body',tier:'پلاس',cap:0,max:24,cr:12},
+    {t:'20:15',n:'فیت‌لند',a:'نارمک',k:'func',tier:'پایه',cap:11,max:20,cr:8},
+  ];
+  let filter = null;
+  const rows = $('#rows'), fl = $('#filters');
+  const all = document.createElement('button'); all.textContent = 'همه'; all.className='act'; fl.appendChild(all);
+  all.onclick = () => { filter=null; render(); setAct(all); };
+  ['fit','yoga','swim','cross','pil','mart'].forEach(k => {
+    const b = document.createElement('button'); b.innerHTML = `<i style="background:${SPORTS[k].hex === '#15140F' ? '#F4F1EA' : SPORTS[k].hex}"></i>${SPORTS[k].n}`;
+    b.onclick = () => { filter=k; render(); setAct(b); }; fl.appendChild(b);
+  });
+  function setAct(b){ $$('#filters button').forEach(x=>x.classList.toggle('act',x===b)); }
+  const flap = (str) => `<span class="flap">${[...str].map(ch=>`<span>${ch}</span>`).join('')}</span>`;
+  function cells(g){ const n=10, on=Math.round(g.cap/g.max*n); return `<span class="cells ${g.cap===0?'out':g.cap<5?'low':''}">${Array.from({length:n},(_,i)=>`<i class="${i<on?'on':''}"></i>`).join('')}</span>`; }
+  function rowHTML(g,i){
+    return `<div class="row" data-i="${i}"><span class="t num">${g.t}</span><span class="g"><b>${g.n}</b><small>${g.a}</small></span><span class="sp sp-c"><i style="background:${g.k==='mart'?'#F4F1EA':SPORTS[g.k].hex}"></i>${SPORTS[g.k].n}</span><span class="rg">${g.tier}</span><span class="capbar">${cells(g)}<span class="capt">${g.cap?fa(g.cap)+' جای خالی':'تکمیل'}</span></span>${flap(fa(g.cr).padStart(2,'۰'))}</div>`;
+  }
+  function render(){
+    $$('#rows .row:not(.head)').forEach(r=>r.remove());
+    GYMS.forEach((g,i) => { if (!filter || g.k===filter) rows.insertAdjacentHTML('beforeend', rowHTML(g,i)); });
+    total();
+  }
+  function total(){ $('#totalSlots').textContent = fa(GYMS.reduce((a,g)=>a+g.cap,0)); $('#liveCount').textContent = fa(GYMS.filter(g=>g.cap>0).length + 17); }
+  render();
+  setInterval(() => {
+    const i = Math.floor(Math.random()*GYMS.length), g = GYMS[i];
+    g.cap = Math.max(0, Math.min(g.max, g.cap + (Math.random()<.55?-1:1)*(1+Math.floor(Math.random()*2))));
+    const r = rows.querySelector(`.row[data-i="${i}"]`);
+    if (r){
+      r.querySelector('.capbar').innerHTML = cells(g) + `<span class="capt">${g.cap?fa(g.cap)+' جای خالی':'تکمیل'}</span>`;
+      if (!reduce) r.querySelectorAll('.flap span').forEach((s,j)=>{ s.classList.remove('flip'); void s.offsetWidth; setTimeout(()=>s.classList.add('flip'), j*90); });
+    }
+    total();
+  }, 1800);
+  const clk = () => { const d=new Date(); $('#clock').textContent = d.toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit',hour12:false}); };
+  clk(); setInterval(clk, 10000);
+})();
+
+/* ---------- steps scrollytelling ---------- */
+(function(){
+  const steps = $$('.step'), screens = $$('#phone .screen');
+  // mobile: clone screens into steps as mini previews
+  steps.forEach((s,i) => {
+    const m = document.createElement('div'); m.className='mini';
+    m.innerHTML = `<div class="phone" style="width:240px;margin-inline:auto"></div>`;
+    const sc = screens[i].cloneNode(true); sc.classList.add('act'); m.firstChild.appendChild(sc);
+    s.appendChild(m);
+  });
+  const so = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting){ const k=+e.target.dataset.s; steps.forEach((s,i)=>s.classList.toggle('act',i===k)); screens.forEach((s,i)=>s.classList.toggle('act',i===k)); }
+  }), {rootMargin:'-45% 0px -45% 0px'});
+  steps.forEach(s => so.observe(s));
+  // QR
+  const q = $('#qrsvg'); let h=''; let seed=7;
+  const rnd=()=> (seed=(seed*9301+49297)%233280)/233280;
+  const finder=(x,y)=>`<rect x="${x}" y="${y}" width="7" height="7" fill="#15140F"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="#15140F"/>`;
+  for(let y=0;y<21;y++)for(let x=0;x<21;x++){ const inF=(x<8&&y<8)||(x>12&&y<8)||(x<8&&y>12); if(!inF && rnd()>.52) h+=`<rect x="${x}" y="${y}" width="1" height="1" fill="#15140F"/>`; }
+  q.innerHTML = h + finder(0,0)+finder(14,0)+finder(0,14) + `<rect x="8.5" y="8.5" width="4" height="4" rx="1" fill="#FF4D1A"/>`;
+  $$('.mini svg[id="qrsvg"]').forEach(x=>x.innerHTML=q.innerHTML);
+})();
+
+/* ---------- calculator ---------- */
+(function(){
+  const PRICE = 12000; // toman per credit (demo)
+  const sess = $('#sess'); let tier = $('#tierSeg .act');
+  const gymsByTier = {8:64,12:105,20:120};
+  function upd(){
+    const n = +sess.value, c = +tier.dataset.c, m = +tier.dataset.m;
+    const credits = Math.round(n*4.33*c), cost = credits*PRICE;
+    sess.style.setProperty('--p', ((n-1)/5*100)+'%');
+    $('#sessOut').textContent = fa(n);
+    $('#costOut').innerHTML = fa(cost) + ' <small>تومان</small>';
+    $('#credOut').textContent = fa(credits) + ' کردیت در ماه';
+    $('#gymsOut').textContent = fa(gymsByTier[c]);
+    const mx = Math.max(cost, m);
+    $('#barA').style.width = Math.max(cost/mx*100, 45)+'%'; $('#barB').style.width = Math.max(m/mx*100, 45)+'%';
+    $('#barAv').textContent = fa(Math.round(cost/1000)) + ' هزار';
+    $('#barBv').textContent = fa(m/1000) + ' هزار';
+    const diff = m - cost;
+    $('#verdict').innerHTML = diff > 0
+      ? `ماهانه <b class="num">${fa(Math.round(diff/1000))} هزار تومان</b> کمتر از عضویت ثابت می‌پردازی — و به جای یک باشگاه، به <b class="num">${fa(gymsByTier[c])}</b> باشگاه دسترسی داری.`
+      : `اگر تقریباً هر روز تمرین می‌کنی، کمی بیشتر می‌پردازی؛ اما در عوض به <b class="num">${fa(gymsByTier[c])}</b> باشگاه و همه‌ی رشته‌ها دسترسی داری، نه فقط یک سالن.`;
+  }
+  sess.oninput = upd;
+  $$('#tierSeg button').forEach(b => b.onclick = () => { tier=b; $$('#tierSeg button').forEach(x=>x.classList.toggle('act',x===b)); upd(); });
+  upd();
+})();
+
+/* ---------- tabs ---------- */
+(function(){
+  const btns = $$('#tabs button'), panes = $$('.pane'), pill = $('#pill');
+  function go(i){
+    btns.forEach((b,j)=>b.classList.toggle('act',i===j)); panes.forEach((p,j)=>p.classList.toggle('act',i===j));
+    const b = btns[i]; pill.style.width = b.offsetWidth+'px'; pill.style.left = b.offsetLeft+'px';
+    if (i===2) setTimeout(()=>$$('#chart i').forEach(x=>x.style.height=x.dataset.h+'%'),50);
+  }
+  btns.forEach((b,i)=>b.onclick=()=>go(i));
+  addEventListener('resize',()=>go(btns.findIndex(b=>b.classList.contains('act'))));
+  document.fonts.ready.then(()=>go(0));
+  // week
+  const W=[['ش','fit','ونک'],['ی','yoga','جردن'],['د',null,'استراحت'],['س','swim','کوهسار'],['چ','cross','میرداماد'],['پ',null,'استراحت'],['ج','pil','جردن']];
+  $('#week').innerHTML = W.map(([d,k,a])=> k
+    ? `<div style="background:color-mix(in srgb,${SPORTS[k].hex} 12%,transparent)"><em>${d}</em><i style="background:${SPORTS[k].hex};color:#fff"><svg><use href="#${SPORTS[k].i}"/></svg></i>${SPORTS[k].n}<em style="font-size:10px">${a}</em></div>`
+    : `<div style="background:var(--paper)"><em>${d}</em><i style="background:var(--paper-2)"></i><em style="font-size:10px">${a}</em></div>`).join('');
+  // chart
+  const H=[18,22,30,46,40,52,88,96,70];
+  $('#chart').innerHTML = H.map((h,i)=>`<div><i data-h="${h}" style="height:0;${i>=6?'':'background:var(--ink)'}"></i></div>`).join('');
+})();
+
+/* ---------- sports grid ---------- */
+$('#sportsGrid').innerHTML = Object.values(SPORTS).map((s,i)=>`
+  <a href="#board" class="sport rv d${i%4}" style="--c:${s.hex}">
+    <span class="ln"></span>
+    <span class="ico"><svg><use href="#${s.i}"/></svg></span>
+    <span><h3>${s.n}</h3><small class="num">${fa(s.g)} باشگاه</small></span>
+  </a>`).join('');
+$$('#sportsGrid .rv').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
