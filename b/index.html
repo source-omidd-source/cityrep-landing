@@ -788,6 +788,9 @@ footer{padding:60px 0 34px}
 @media (prefers-reduced-motion:reduce){.fx-rail .axp{opacity:1;translate:none}}
 :root{--fx-track:var(--violet-100);--fx-thumb:var(--violet)}
 [data-theme="dark"]{--fx-track:rgba(255,255,255,.1);--fx-thumb:var(--lime)}
+/* hero phone fits inside the stage so the app tab bar is never clipped */
+.stage .phone{width:43%;top:5.5%}
+@media (max-width:640px){.stage{aspect-ratio:1/1.16}.stage .phone{width:50%;top:5%}}
 </style>
 </head>
 <body>
